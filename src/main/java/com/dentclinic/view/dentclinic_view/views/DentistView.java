@@ -1,6 +1,7 @@
 package com.dentclinic.view.dentclinic_view.views;
 
 import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
+import com.dentclinic.view.dentclinic_view.layout.DentistLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -12,8 +13,11 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.security.PermitAll;
+
+@PermitAll
 @Route(value="dentist", layout = DentistLayout.class)
-@PageTitle("Appointments | Vaadin CRM")
+@PageTitle("Appointments | DentClinicApp")
 @Component
 public class DentistView extends VerticalLayout
 {
@@ -23,6 +27,8 @@ public class DentistView extends VerticalLayout
 
     public DentistView(@Autowired AppointmentService appointmentService) {
         api = appointmentService;
+
+        addClassName("dentist-view");
 
         grid = new Grid<>();
         grid.addColumn(AppointmentDto::getName).setHeader("Name");

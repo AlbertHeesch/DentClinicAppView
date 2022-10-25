@@ -1,8 +1,11 @@
-package com.dentclinic.view.dentclinic_view.views;
+package com.dentclinic.view.dentclinic_view.layout;
 
+import com.dentclinic.view.dentclinic_view.security.SecurityService;
 import com.dentclinic.view.dentclinic_view.service.DentistService;
+import com.dentclinic.view.dentclinic_view.views.DentistView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -16,10 +19,12 @@ import java.util.stream.Collectors;
 
 public class DentistLayout extends AppLayout {
 
-    private DentistService api;
+    private final DentistService api;
+    private final SecurityService securityService;
 
-    public DentistLayout(@Autowired DentistService dentistService) {
+    public DentistLayout(@Autowired DentistService dentistService, SecurityService securityService) {
         api = dentistService;
+        this.securityService = securityService;
         createHeader();
         createDrawer();
     }
@@ -28,12 +33,16 @@ public class DentistLayout extends AppLayout {
         H1 logo = new H1("DentClinicApp");
         logo.addClassNames("text-l", "m-m");
 
+        Button logout = new Button("Log out", e -> securityService.logout());
+
         HorizontalLayout header = new HorizontalLayout(
                 new DrawerToggle(),
-                logo
+                logo,
+                logout
         );
 
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        header.expand(logo);
         header.setWidth("100%");
         header.addClassNames("py-0", "px-m");
 
@@ -52,9 +61,9 @@ public class DentistLayout extends AppLayout {
                                 .map(dentist -> dentist.getName() + " " + dentist.getSurname())
                                         .map(name -> new RouterLink(name, DentistView.class))
                 .collect(Collectors.toList());
-        dentistLinkList.stream()
+        dentistLinkList
                         .forEach(link -> link.setHighlightCondition(HighlightConditions.sameLocation()));
-        dentistLinkList.stream()
+        dentistLinkList
                         .forEach(e -> addToDrawer(new VerticalLayout(e)));
     }
 }
