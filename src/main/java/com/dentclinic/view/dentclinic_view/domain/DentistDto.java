@@ -9,13 +9,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class Appointment {
+public class DentistDto {
     private Long id;
     private String name;
     private String surname;
-    private String pesel;
-    private String email;
-    private LocalDate date;
-    private Dentist dentist;
-    private Services service;
+    private LocalDate experience;
 }
