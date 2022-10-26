@@ -2,7 +2,10 @@ package com.dentclinic.view.dentclinic_view.layout;
 
 import com.dentclinic.view.dentclinic_view.security.SecurityService;
 import com.dentclinic.view.dentclinic_view.service.DentistService;
-import com.dentclinic.view.dentclinic_view.views.DentistView;
+import com.dentclinic.view.dentclinic_view.views.dentist.DentistOneView;
+import com.dentclinic.view.dentclinic_view.views.dentist.DentistThreeView;
+import com.dentclinic.view.dentclinic_view.views.dentist.DentistTwoView;
+import com.dentclinic.view.dentclinic_view.views.dentist.DentistView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -64,22 +67,23 @@ public class DentistLayout extends AppLayout {
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
             RouterLink dentist1Link = new RouterLink(api.fetchAllDentists().get(0).getName() + ""
-                    + api.fetchAllDentists().get(0).getSurname(), DentistView.class);
+                    + api.fetchAllDentists().get(0).getSurname(), DentistOneView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
             RouterLink dentist2Link = new RouterLink(api.fetchAllDentists().get(1).getName() + ""
-                    + api.fetchAllDentists().get(1).getSurname(), DentistView.class);
+                    + api.fetchAllDentists().get(1).getSurname(), DentistTwoView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
             RouterLink dentist3Link = new RouterLink(api.fetchAllDentists().get(2).getName() + ""
-                    + api.fetchAllDentists().get(2).getSurname(), DentistView.class);
+                    + api.fetchAllDentists().get(2).getSurname(), DentistThreeView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-            addToDrawer(new VerticalLayout(allDentistsLink),
-                    new VerticalLayout(dentist1Link),
-                    new VerticalLayout(dentist2Link),
-                    new VerticalLayout(dentist3Link)
-            );
+            addToDrawer(new VerticalLayout(
+                    allDentistsLink,
+                    dentist1Link,
+                    dentist2Link,
+                    dentist3Link
+            ));
         }
 ////        List<RouterLink> dentistLinkList = api.fetchAllDentists().stream()
 //                                .map(dentist -> dentist.getName() + " " + dentist.getSurname())

@@ -1,8 +1,9 @@
-package com.dentclinic.view.dentclinic_view.views;
+package com.dentclinic.view.dentclinic_view.views.dentist;
 
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
 import com.dentclinic.view.dentclinic_view.layout.DentistLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
+import com.dentclinic.view.dentclinic_view.service.DentistService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,20 +14,23 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.PermitAll;
+import java.util.stream.Collectors;
 
 @PermitAll
-@Route(value="dentist", layout = DentistLayout.class)
+@Route(value="dentist/2", layout = DentistLayout.class)
 @PageTitle("Appointments | DentClinicApp")
-public class DentistView extends VerticalLayout
+public class DentistTwoView extends VerticalLayout
 {
     private Grid<Appointment> grid;
     private AppointmentService api;
     TextField filterText = new TextField();
+    private DentistService dentistService;
 
-    public DentistView(@Autowired AppointmentService appointmentService) {
+    public DentistTwoView(@Autowired AppointmentService appointmentService, @Autowired DentistService dentistService) {
         api = appointmentService;
+        this.dentistService = dentistService;
 
-        addClassName("dentist-view");
+        addClassName("dentist-one-view");
 
         createGrid();
         updateList();
@@ -59,6 +63,9 @@ public class DentistView extends VerticalLayout
     }
 
     private void updateList() {
-        grid.setItems(api.fetchFilteredAppointments(filterText.getValue()));
+        Long dentistId = dentistService.fetchAllDentists().get(1).getId();
+        grid.setItems(api.fetchFilteredAppointments(filterText.getValue()).stream()
+                .filter(appointment -> appointment.getDentist().getId() == dentistId)
+                .collect(Collectors.toList()));
     }
 }
