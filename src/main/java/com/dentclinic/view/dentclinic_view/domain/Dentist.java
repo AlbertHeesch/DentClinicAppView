@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @Getter
@@ -16,5 +14,4 @@ public class Dentist {
     private String name;
     private String surname;
     private LocalDate experience;
-    private List<Appointment> appointmentList = new ArrayList<>();
 }

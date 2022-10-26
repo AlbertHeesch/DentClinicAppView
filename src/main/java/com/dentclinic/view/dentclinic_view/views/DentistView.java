@@ -1,6 +1,6 @@
 package com.dentclinic.view.dentclinic_view.views;
 
-import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
+import com.dentclinic.view.dentclinic_view.domain.Appointment;
 import com.dentclinic.view.dentclinic_view.layout.DentistLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.vaadin.flow.component.grid.Grid;
@@ -19,7 +19,7 @@ import javax.annotation.security.PermitAll;
 @PageTitle("Appointments | DentClinicApp")
 public class DentistView extends VerticalLayout
 {
-    private Grid<AppointmentDto> grid;
+    private Grid<Appointment> grid;
     private AppointmentService api;
     TextField filterText = new TextField();
 
@@ -38,11 +38,11 @@ public class DentistView extends VerticalLayout
     private void createGrid()
     {
         grid = new Grid<>();
-        grid.addColumn(AppointmentDto::getName).setHeader("Name");
-        grid.addColumn(AppointmentDto::getSurname).setHeader("Surname");
-        grid.addColumn(AppointmentDto::getPesel).setHeader("Pesel");
-        grid.addColumn(AppointmentDto::getEmail).setHeader("Email");
-        grid.addColumn(AppointmentDto::getDate).setHeader("Date");
+        grid.addColumn(Appointment::getName).setHeader("Name");
+        grid.addColumn(Appointment::getSurname).setHeader("Surname");
+        grid.addColumn(Appointment::getPesel).setHeader("Pesel");
+        grid.addColumn(Appointment::getEmail).setHeader("Email");
+        grid.addColumn(Appointment::getDate).setHeader("Date");
         grid.addColumn(appointmentDto -> appointmentDto.getService().getDescription()).setHeader("Service");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
