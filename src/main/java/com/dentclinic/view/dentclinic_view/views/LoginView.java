@@ -23,6 +23,7 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
+        login.setForgotPasswordButtonVisible(false);
         login.setAction("login");
 
         add(new H1("DentClinicApp"), login);

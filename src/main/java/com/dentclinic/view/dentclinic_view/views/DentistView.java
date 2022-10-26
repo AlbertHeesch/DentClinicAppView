@@ -11,14 +11,12 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.security.PermitAll;
 
 @PermitAll
 @Route(value="dentist", layout = DentistLayout.class)
 @PageTitle("Appointments | DentClinicApp")
-@Component
 public class DentistView extends VerticalLayout
 {
     private Grid<AppointmentDto> grid;
@@ -30,6 +28,15 @@ public class DentistView extends VerticalLayout
 
         addClassName("dentist-view");
 
+        createGrid();
+        updateList();
+
+        add(getToolbar(), grid);
+        setSizeFull();
+    }
+
+    private void createGrid()
+    {
         grid = new Grid<>();
         grid.addColumn(AppointmentDto::getName).setHeader("Name");
         grid.addColumn(AppointmentDto::getSurname).setHeader("Surname");
@@ -38,10 +45,6 @@ public class DentistView extends VerticalLayout
         grid.addColumn(AppointmentDto::getDate).setHeader("Date");
         grid.addColumn(appointmentDto -> appointmentDto.getService().getDescription()).setHeader("Service");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
-
-        updateList();
-        add(getToolbar(), grid);
-        setSizeFull();
     }
 
     private HorizontalLayout getToolbar() {

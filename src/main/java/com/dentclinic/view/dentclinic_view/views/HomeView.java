@@ -10,11 +10,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import org.springframework.stereotype.Component;
 
 @Route("home")
 @PageTitle("Home | DentClinicApp")
-@Component
 @AnonymousAllowed
 public class HomeView extends VerticalLayout {
 
@@ -25,6 +23,20 @@ public class HomeView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
 
+        createText();
+        createButtons();
+    }
+
+    private void createText()
+    {
+        add(new H1("DentClinicApp"));
+        add(new H2("Welcome to our clinic!"));
+        add(new Paragraph("Tell us who you are :)"));
+        add(new Paragraph("I am a/an :"));
+    }
+
+    private void createButtons()
+    {
         Button patientButton = new Button("Patient");
         Button employeeButton = new Button("Employee");
         employeeButton.addClickListener(e ->
@@ -35,10 +47,7 @@ public class HomeView extends VerticalLayout {
         patientButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
         employeeButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
         adminButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
-        add(new H1("DentClinicApp"));
-        add(new H2("Welcome to our clinic!"));
-        add(new Paragraph("Tell us who you are :)"));
-        add(new Paragraph("I am a/an :"));
+
         HorizontalLayout buttonsLayout = new HorizontalLayout(patientButton, employeeButton, adminButton);
         addAndExpand(buttonsLayout);
     }

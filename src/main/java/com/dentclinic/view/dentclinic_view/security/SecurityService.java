@@ -19,7 +19,6 @@ public class SecurityService {
         if (principal instanceof UserDetails) {
             return (UserDetails) principal;
         }
-        // Anonymous or no authentication.
         return null;
     }
 
