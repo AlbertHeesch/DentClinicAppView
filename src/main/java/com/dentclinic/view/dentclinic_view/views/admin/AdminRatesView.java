@@ -2,7 +2,7 @@ package com.dentclinic.view.dentclinic_view.views.admin;
 
 import com.dentclinic.view.dentclinic_view.domain.Rate;
 import com.dentclinic.view.dentclinic_view.layout.AdminLayout;
-import com.dentclinic.view.dentclinic_view.service.AppointmentService;
+import com.dentclinic.view.dentclinic_view.service.RateService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -16,15 +16,15 @@ import javax.annotation.security.RolesAllowed;
 @PageTitle("Rates | DentClinicApp")
 public class AdminRatesView extends VerticalLayout {
     private Grid<Rate> grid;
-    private AppointmentService api;
+    private RateService api;
 
-    public AdminRatesView(@Autowired AppointmentService appointmentService) {
-        api = appointmentService;
+    public AdminRatesView(@Autowired RateService rateService) {
+        api = rateService;
 
         addClassName("admin-rate-view");
 
         createGrid();
-//        updateList();
+        updateList();
 
         add(grid);
         setSizeFull();
@@ -38,8 +38,13 @@ public class AdminRatesView extends VerticalLayout {
         grid.addColumn(Rate::getValue).setHeader("Value");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
-//    private void updateList() {
-//        grid.setItems(api.fetchFilteredAppointments(filterText.getValue()));
-//    }
+    private void updateList() {
+        if(api.fetchAllRates().size() == 0)
+        {
+            grid.setItems(new Rate(0L, "No rates found", 0.0));
+        } else {
+            grid.setItems(api.fetchAllRates());
+        }
+    }
 }
 

@@ -25,10 +25,10 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setForgotPasswordButtonVisible(false);
         login.setAction("login");
-
         add(new H1("DentClinicApp"), login);
         add(new Paragraph("Username- admin, password- userpass FOR ADMIN"));
         add(new Paragraph("Username- user, password- userpass FOR USER"));
+        add(new Paragraph());
     }
 
     @Override
