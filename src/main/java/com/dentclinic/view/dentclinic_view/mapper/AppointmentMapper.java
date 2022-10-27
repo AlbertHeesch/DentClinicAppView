@@ -1,14 +1,12 @@
 package com.dentclinic.view.dentclinic_view.mapper;
 
 import com.dentclinic.view.dentclinic_view.domain.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class AppointmentMapper
 {
     public Appointment mapToAppointment(final AppointmentDto appointmentDto) {
@@ -54,13 +52,6 @@ public class AppointmentMapper
                         appointment.getService().getCost()
                 )
         );
-    }
-
-    public List<AppointmentDto> mapToAppointmentDtoList(final List<Appointment> appointmentList)
-    {
-        return appointmentList.stream()
-                .map(this::mapToAppointmentDto)
-                .collect(Collectors.toList());
     }
 
     public List<Appointment> mapToAppointmentList(final List<AppointmentDto> appointmentDtoList)

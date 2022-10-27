@@ -1,9 +1,10 @@
-package com.dentclinic.view.dentclinic_view.views.dentist;
+package com.dentclinic.view.dentclinic_view.views.admin;
 
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
-import com.dentclinic.view.dentclinic_view.layout.DentistLayout;
+import com.dentclinic.view.dentclinic_view.domain.Dentist;
+import com.dentclinic.view.dentclinic_view.domain.Services;
+import com.dentclinic.view.dentclinic_view.layout.AdminLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
-import com.dentclinic.view.dentclinic_view.service.DentistService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -13,24 +14,21 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.security.PermitAll;
-import java.util.stream.Collectors;
+import javax.annotation.security.RolesAllowed;
+import java.time.LocalDate;
 
-@PermitAll
-@Route(value="dentist/2", layout = DentistLayout.class)
+@RolesAllowed({ "ROLE_ADMIN" })
+@Route(value="admin/appointment", layout = AdminLayout.class)
 @PageTitle("Appointments | DentClinicApp")
-public class DentistTwoView extends VerticalLayout
-{
+public class AdminAppointmentsView extends VerticalLayout {
     private Grid<Appointment> grid;
     private AppointmentService api;
     TextField filterText = new TextField();
-    private DentistService dentistService;
 
-    public DentistTwoView(@Autowired AppointmentService appointmentService, @Autowired DentistService dentistService) {
+    public AdminAppointmentsView(@Autowired AppointmentService appointmentService) {
         api = appointmentService;
-        this.dentistService = dentistService;
 
-        addClassName("dentist-two-view");
+        addClassName("admin-appointment-view");
 
         createGrid();
         updateList();
@@ -39,19 +37,21 @@ public class DentistTwoView extends VerticalLayout
         setSizeFull();
     }
 
-    private void createGrid()
+    public void createGrid()
     {
         grid = new Grid<>();
+        grid.addColumn(Appointment::getId).setHeader("ID");
         grid.addColumn(Appointment::getName).setHeader("Name");
         grid.addColumn(Appointment::getSurname).setHeader("Surname");
         grid.addColumn(Appointment::getPesel).setHeader("Pesel");
         grid.addColumn(Appointment::getEmail).setHeader("Email");
         grid.addColumn(Appointment::getDate).setHeader("Date");
+        grid.addColumn(appointmentDto -> appointmentDto.getDentist().getSurname()).setHeader("Dentist");
         grid.addColumn(appointmentDto -> appointmentDto.getService().getDescription()).setHeader("Service");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
-    private HorizontalLayout getToolbar() {
+    public HorizontalLayout getToolbar() {
         filterText.setPlaceholder("Filter by surname...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
@@ -63,9 +63,13 @@ public class DentistTwoView extends VerticalLayout
     }
 
     private void updateList() {
-        Long dentistId = dentistService.fetchAllDentists().get(1).getId();
-        grid.setItems(api.fetchFilteredAppointments(filterText.getValue()).stream()
-                .filter(appointment -> appointment.getDentist().getId() == dentistId)
-                .collect(Collectors.toList()));
+        if(api.fetchAllAppointments().size() == 0) {
+            grid.setItems(new Appointment(0L, " ", "No appointments found", " ", " ", LocalDate.now(),
+                    new Dentist(0L, " ", " ", LocalDate.now()),
+                    new Services(0L, " ", 0.0)));
+        } else {
+            grid.setItems(api.fetchFilteredAppointments(filterText.getValue()));
+        }
     }
 }
+

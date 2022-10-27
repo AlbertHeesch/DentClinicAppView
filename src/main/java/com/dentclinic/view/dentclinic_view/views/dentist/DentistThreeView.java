@@ -30,7 +30,7 @@ public class DentistThreeView extends VerticalLayout
         api = appointmentService;
         this.dentistService = dentistService;
 
-        addClassName("dentist-one-view");
+        addClassName("dentist-three-view");
 
         createGrid();
         updateList();

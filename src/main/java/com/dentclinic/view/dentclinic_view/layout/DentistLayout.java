@@ -5,7 +5,7 @@ import com.dentclinic.view.dentclinic_view.service.DentistService;
 import com.dentclinic.view.dentclinic_view.views.dentist.DentistOneView;
 import com.dentclinic.view.dentclinic_view.views.dentist.DentistThreeView;
 import com.dentclinic.view.dentclinic_view.views.dentist.DentistTwoView;
-import com.dentclinic.view.dentclinic_view.views.dentist.DentistView;
+import com.dentclinic.view.dentclinic_view.views.dentist.AllDentistView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -58,12 +58,12 @@ public class DentistLayout extends AppLayout {
     private void createDrawer() {
         if(api.fetchAllDentists().size() == 0)
         {
-            RouterLink noAppointmentsLink = new RouterLink("No appointments", DentistView.class);
+            RouterLink noAppointmentsLink = new RouterLink("No dentists found", AllDentistView.class);
             noAppointmentsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
             addToDrawer(new VerticalLayout(noAppointmentsLink));
         } else {
-            RouterLink allDentistsLink = new RouterLink("All dentists", DentistView.class);
+            RouterLink allDentistsLink = new RouterLink("All dentists", AllDentistView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
             RouterLink dentist1Link = new RouterLink(api.fetchAllDentists().get(0).getName() + ""

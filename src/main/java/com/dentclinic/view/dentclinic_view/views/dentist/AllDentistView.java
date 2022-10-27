@@ -15,18 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.security.PermitAll;
 
 @PermitAll
-@Route(value="dentist", layout = DentistLayout.class)
+@Route(value="dentist/all", layout = DentistLayout.class)
 @PageTitle("Appointments | DentClinicApp")
-public class DentistView extends VerticalLayout
+public class AllDentistView extends VerticalLayout
 {
     private Grid<Appointment> grid;
     private AppointmentService api;
     TextField filterText = new TextField();
 
-    public DentistView(@Autowired AppointmentService appointmentService) {
+    public AllDentistView(@Autowired AppointmentService appointmentService) {
         api = appointmentService;
 
-        addClassName("dentist-view");
+        addClassName("all-dentist-view");
 
         createGrid();
         updateList();
