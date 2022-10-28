@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -11,10 +15,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Appointment {
     private Long id;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String surname;
-    private String pesel;
+    @PositiveOrZero
+    private BigDecimal pesel;
+    @NotEmpty
     private String email;
+    @Future
     private LocalDate date;
     private Dentist dentist;
     private Services service;

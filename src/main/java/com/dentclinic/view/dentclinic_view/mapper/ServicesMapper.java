@@ -4,6 +4,7 @@ import com.dentclinic.view.dentclinic_view.domain.Services;
 import com.dentclinic.view.dentclinic_view.domain.ServicesDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class ServicesMapper {
         return new Services(
                 servicesDto.getId(),
                 servicesDto.getDescription(),
-                servicesDto.getCost()
+                BigDecimal.valueOf(servicesDto.getCost())
         );
     }
 
@@ -23,7 +24,7 @@ public class ServicesMapper {
         return new ServicesDto(
                 services.getId(),
                 services.getDescription(),
-                services.getCost()
+                services.getCost().doubleValue()
         );
     }
 

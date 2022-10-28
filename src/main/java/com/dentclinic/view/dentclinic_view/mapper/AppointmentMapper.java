@@ -3,6 +3,7 @@ package com.dentclinic.view.dentclinic_view.mapper;
 import com.dentclinic.view.dentclinic_view.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class AppointmentMapper
                 appointmentDto.getId(),
                 appointmentDto.getName(),
                 appointmentDto.getSurname(),
-                appointmentDto.getPesel(),
+                BigDecimal.valueOf(Double.parseDouble(appointmentDto.getPesel())),
                 appointmentDto.getEmail(),
                 appointmentDto.getDate(),
                 new Dentist(
@@ -26,7 +27,7 @@ public class AppointmentMapper
                 new Services(
                         appointmentDto.getService().getId(),
                         appointmentDto.getService().getDescription(),
-                        appointmentDto.getService().getCost()
+                        BigDecimal.valueOf(appointmentDto.getService().getCost())
                 )
         );
     }
@@ -37,7 +38,7 @@ public class AppointmentMapper
                 appointment.getId(),
                 appointment.getName(),
                 appointment.getSurname(),
-                appointment.getPesel(),
+                appointment.getPesel().toString(),
                 appointment.getEmail(),
                 appointment.getDate(),
                 new DentistDto(
@@ -49,7 +50,7 @@ public class AppointmentMapper
                 new ServicesDto(
                         appointment.getService().getId(),
                         appointment.getService().getDescription(),
-                        appointment.getService().getCost()
+                        appointment.getService().getCost().doubleValue()
                 )
         );
     }

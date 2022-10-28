@@ -34,4 +34,20 @@ public class AppointmentService {
                     .collect(Collectors.toList());
         }
     }
+
+    public void deleteAppointment(Appointment appointment) {
+        client.deleteAppointment(mapper.mapToAppointmentDto(appointment));
+    }
+
+    public void saveAppointment(Appointment appointment) {
+        if (appointment == null) {
+            System.err.println("Contact is null. Are you sure you have connected your form to the application?");
+        } else {
+            client.addAppointment(mapper.mapToAppointmentDto(appointment));
+        }
+    }
+
+    public void updateAppointment(Appointment appointment) {
+        client.updateAppointment(mapper.mapToAppointmentDto(appointment));
+    }
 }

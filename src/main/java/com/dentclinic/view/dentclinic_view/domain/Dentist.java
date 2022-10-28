@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -11,7 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Dentist {
     private Long id;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String surname;
+    @Past
     private LocalDate experience;
 }

@@ -4,6 +4,7 @@ import com.dentclinic.view.dentclinic_view.domain.Rate;
 import com.dentclinic.view.dentclinic_view.domain.RateDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,7 @@ public class RateMapper {
         return new Rate(
                 rateDto.getId(),
                 rateDto.getName(),
-                rateDto.getValue()
+                BigDecimal.valueOf(rateDto.getValue())
         );
     }
 
@@ -23,7 +24,7 @@ public class RateMapper {
         return new RateDto(
                 rate.getId(),
                 rate.getName(),
-                rate.getValue()
+                rate.getValue().doubleValue()
         );
     }
 

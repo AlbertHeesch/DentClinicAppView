@@ -1,10 +1,13 @@
 package com.dentclinic.view.dentclinic_view.views.admin;
 
 import com.dentclinic.view.dentclinic_view.domain.Dentist;
+import com.dentclinic.view.dentclinic_view.form.DentistForm;
 import com.dentclinic.view.dentclinic_view.layout.AdminLayout;
-import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.dentclinic.view.dentclinic_view.service.DentistService;
+import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -18,7 +21,8 @@ import java.time.LocalDate;
 @PageTitle("Dentists | DentClinicApp")
 public class AdminDentistsView extends VerticalLayout {
     private Grid<Dentist> grid;
-    private DentistService api;
+    private final DentistService api;
+    private DentistForm form;
 
     public AdminDentistsView(@Autowired DentistService dentistService) {
         api = dentistService;
@@ -26,10 +30,21 @@ public class AdminDentistsView extends VerticalLayout {
         addClassName("admin-dentist-view");
 
         createGrid();
-        updateList();
+        configureForm();
 
-        add(grid);
+        add(getToolbar(),getContent());
         setSizeFull();
+        updateList();
+        closeEditor();
+    }
+
+    private HorizontalLayout getToolbar() {
+        Button addRateButton = new Button("Add rate");
+        addRateButton.addClickListener(click -> addDentist());
+
+        HorizontalLayout toolbar = new HorizontalLayout(addRateButton);
+        toolbar.addClassName("toolbar");
+        return toolbar;
     }
 
     public void createGrid()
@@ -41,6 +56,7 @@ public class AdminDentistsView extends VerticalLayout {
         grid.addColumn(Dentist::getExperience).setHeader("Experience");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
+
     private void updateList() {
         if(api.fetchAllDentists().size() == 0)
         {
@@ -48,6 +64,56 @@ public class AdminDentistsView extends VerticalLayout {
         } else {
             grid.setItems(api.fetchAllDentists());
         }
+    }
+
+    private Component getContent() {
+        HorizontalLayout content = new HorizontalLayout(grid, form);
+        content.setFlexGrow(2, grid);
+        content.setFlexGrow(1, form);
+        content.addClassNames("content");
+        content.setSizeFull();
+        return content;
+    }
+
+    private void configureForm() {
+        form = new DentistForm();
+        form.setWidth("25em");
+        form.addListener(DentistForm.SaveEvent.class, this::saveDentist);
+        form.addListener(DentistForm.DeleteEvent.class, this::deleteDentist);
+        form.addListener(DentistForm.CloseEvent.class, e -> closeEditor());
+    }
+
+    private void saveDentist(DentistForm.SaveEvent event) {
+        api.saveDentist(event.getDentist());
+        updateList();
+        closeEditor();
+    }
+
+    private void deleteDentist(DentistForm.DeleteEvent event) {
+        api.deleteDentist(event.getDentist());
+        updateList();
+        closeEditor();
+    }
+
+    public void editDentist(Dentist dentist) {
+        if (dentist == null) {
+            closeEditor();
+        } else {
+            form.setDentist(dentist);
+            form.setVisible(true);
+            addClassName("editing");
+        }
+    }
+
+    private void closeEditor() {
+        form.setDentist(null);
+        form.setVisible(false);
+        removeClassName("editing");
+    }
+
+    private void addDentist() {
+        grid.asSingleSelect().clear();
+        editDentist(new Dentist());
     }
 }
 

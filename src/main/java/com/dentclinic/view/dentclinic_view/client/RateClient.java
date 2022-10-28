@@ -39,4 +39,43 @@ public class RateClient {
             return Collections.emptyList();
         }
     }
+
+    public void addRate(RateDto rateDto) {
+        String BASE_URL = "http://localhost:8082/v1/rate";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", rateDto.getId())
+                .queryParam("name", rateDto.getName())
+                .queryParam("value", rateDto.getValue())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.postForObject(url, null, RateDto.class);
+    }
+
+    public void updateRate(RateDto rateDto) {
+        String BASE_URL = "http://localhost:8082/v1/rate";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", rateDto.getId())
+                .queryParam("name", rateDto.getName())
+                .queryParam("value", rateDto.getValue())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.put(url, null);
+    }
+
+    public void deleteRate(RateDto rateDto) {
+        String BASE_URL = "http://localhost:8082/v1/rate";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", rateDto.getId())
+                .queryParam("name", rateDto.getName())
+                .queryParam("value", rateDto.getValue())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.delete(url);
+    }
 }

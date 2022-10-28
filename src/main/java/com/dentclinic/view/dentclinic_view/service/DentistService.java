@@ -20,4 +20,20 @@ public class DentistService {
         List<DentistDto> dtoList = client.getDentists();
         return mapper.mapToDentistList(dtoList);
     }
+
+    public void deleteDentist(Dentist dentist) {
+        client.deleteDentist(mapper.mapToDentistDto(dentist));
+    }
+
+    public void saveDentist(Dentist dentist) {
+        if (dentist == null) {
+            System.err.println("Contact is null. Are you sure you have connected your form to the application?");
+        } else {
+            client.addDentist(mapper.mapToDentistDto(dentist));
+        }
+    }
+
+    public void updateDentist(Dentist dentist) {
+        client.updateDentist(mapper.mapToDentistDto(dentist));
+    }
 }

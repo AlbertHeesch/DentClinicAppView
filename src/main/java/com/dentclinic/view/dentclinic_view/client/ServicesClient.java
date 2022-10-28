@@ -1,5 +1,6 @@
 package com.dentclinic.view.dentclinic_view.client;
 
+import com.dentclinic.view.dentclinic_view.domain.RateDto;
 import com.dentclinic.view.dentclinic_view.domain.ServicesDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -38,5 +39,44 @@ public class ServicesClient {
             LOGGER.error(e.getMessage(), e);
             return Collections.emptyList();
         }
+    }
+
+    public void addService(ServicesDto servicesDto) {
+        String BASE_URL = "http://localhost:8082/v1/service";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", servicesDto.getId())
+                .queryParam("description", servicesDto.getDescription())
+                .queryParam("cost", servicesDto.getCost())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.postForObject(url, null, ServicesDto.class);
+    }
+
+    public void updateService(ServicesDto servicesDto) {
+        String BASE_URL = "http://localhost:8082/v1/service";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", servicesDto.getId())
+                .queryParam("description", servicesDto.getDescription())
+                .queryParam("cost", servicesDto.getCost())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.put(url, null);
+    }
+
+    public void deleteService(ServicesDto servicesDto) {
+        String BASE_URL = "http://localhost:8082/v1/service";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", servicesDto.getId())
+                .queryParam("description", servicesDto.getDescription())
+                .queryParam("cost", servicesDto.getCost())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.delete(url);
     }
 }

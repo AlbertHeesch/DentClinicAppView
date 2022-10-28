@@ -2,6 +2,7 @@ package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
 import com.dentclinic.view.dentclinic_view.domain.DentistDto;
+import com.dentclinic.view.dentclinic_view.domain.RateDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,5 +40,47 @@ public class DentistClient {
             LOGGER.error(e.getMessage(), e);
             return Collections.emptyList();
         }
+    }
+
+    public void addDentist(DentistDto dentistDto) {
+        String BASE_URL = "http://localhost:8082/v1/dentist";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", dentistDto.getId())
+                .queryParam("name", dentistDto.getName())
+                .queryParam("surname", dentistDto.getSurname())
+                .queryParam("experience", dentistDto.getExperience())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.postForObject(url, null, DentistDto.class);
+    }
+
+    public void updateDentist(DentistDto dentistDto) {
+        String BASE_URL = "http://localhost:8082/v1/dentist";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", dentistDto.getId())
+                .queryParam("name", dentistDto.getName())
+                .queryParam("surname", dentistDto.getSurname())
+                .queryParam("experience", dentistDto.getExperience())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.put(url, null);
+    }
+
+    public void deleteDentist(DentistDto dentistDto) {
+        String BASE_URL = "http://localhost:8082/v1/dentist";
+        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("id", dentistDto.getId())
+                .queryParam("name", dentistDto.getName())
+                .queryParam("surname", dentistDto.getSurname())
+                .queryParam("experience", dentistDto.getExperience())
+                .build()
+                .encode()
+                .toUri();
+
+        restTemplate.delete(url);
     }
 }

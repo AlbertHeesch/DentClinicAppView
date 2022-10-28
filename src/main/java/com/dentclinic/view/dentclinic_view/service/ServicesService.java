@@ -20,4 +20,20 @@ public class ServicesService {
         List<ServicesDto> dtoList = client.getServices();
         return mapper.mapToServicesList(dtoList);
     }
+
+    public void deleteService(Services services) {
+        client.deleteService(mapper.mapToServicesDto(services));
+    }
+
+    public void saveService(Services services) {
+        if (services == null) {
+            System.err.println("Contact is null. Are you sure you have connected your form to the application?");
+        } else {
+            client.addService(mapper.mapToServicesDto(services));
+        }
+    }
+
+    public void updateService(Services services) {
+        client.updateService(mapper.mapToServicesDto(services));
+    }
 }
