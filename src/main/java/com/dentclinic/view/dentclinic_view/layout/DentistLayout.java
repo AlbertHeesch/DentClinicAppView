@@ -66,15 +66,15 @@ public class DentistLayout extends AppLayout {
             RouterLink allDentistsLink = new RouterLink("All dentists", AllDentistView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-            RouterLink dentist1Link = new RouterLink(api.fetchAllDentists().get(0).getName() + ""
+            RouterLink dentist1Link = new RouterLink(api.fetchAllDentists().get(0).getName() + " "
                     + api.fetchAllDentists().get(0).getSurname(), DentistOneView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-            RouterLink dentist2Link = new RouterLink(api.fetchAllDentists().get(1).getName() + ""
+            RouterLink dentist2Link = new RouterLink(api.fetchAllDentists().get(1).getName() + " "
                     + api.fetchAllDentists().get(1).getSurname(), DentistTwoView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
-            RouterLink dentist3Link = new RouterLink(api.fetchAllDentists().get(2).getName() + ""
+            RouterLink dentist3Link = new RouterLink(api.fetchAllDentists().get(2).getName() + " "
                     + api.fetchAllDentists().get(2).getSurname(), DentistThreeView.class);
             allDentistsLink.setHighlightCondition(HighlightConditions.sameLocation());
 
@@ -85,13 +85,5 @@ public class DentistLayout extends AppLayout {
                     dentist3Link
             ));
         }
-////        List<RouterLink> dentistLinkList = api.fetchAllDentists().stream()
-//                                .map(dentist -> dentist.getName() + " " + dentist.getSurname())
-//                                        .map(name -> new RouterLink(name, DentistView.class))
-//                .collect(Collectors.toList());
-//        dentistLinkList
-//                        .forEach(link -> link.setHighlightCondition(HighlightConditions.sameLocation()));
-//        dentistLinkList
-//                        .forEach(e -> addToDrawer(new VerticalLayout(e)));
     }
 }

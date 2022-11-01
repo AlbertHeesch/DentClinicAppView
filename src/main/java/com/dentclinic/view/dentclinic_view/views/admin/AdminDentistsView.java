@@ -7,6 +7,7 @@ import com.dentclinic.view.dentclinic_view.service.DentistService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -14,7 +15,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.time.LocalDate;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/dentist", layout = AdminLayout.class)
@@ -39,11 +39,18 @@ public class AdminDentistsView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        Button addRateButton = new Button("Add rate");
+        Button addRateButton = new Button("Add a dentist");
         addRateButton.addClickListener(click -> addDentist());
 
         HorizontalLayout toolbar = new HorizontalLayout(addRateButton);
         toolbar.addClassName("toolbar");
+
+        if(!(api.fetchAllDentists().size() == 0))
+        {
+            Paragraph editInfoText = new Paragraph("In order to edit an element, click it.");
+            toolbar.add(editInfoText);
+        }
+
         return toolbar;
     }
 
@@ -55,15 +62,13 @@ public class AdminDentistsView extends VerticalLayout {
         grid.addColumn(Dentist::getSurname).setHeader("Surname");
         grid.addColumn(Dentist::getExperience).setHeader("Experience");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        grid.asSingleSelect().addValueChangeListener(event ->
+                editDentist(event.getValue()));
     }
 
     private void updateList() {
-        if(api.fetchAllDentists().size() == 0)
-        {
-            grid.setItems(new Dentist(0L, " ", "No dentists found", LocalDate.now()));
-        } else {
             grid.setItems(api.fetchAllDentists());
-        }
     }
 
     private Component getContent() {

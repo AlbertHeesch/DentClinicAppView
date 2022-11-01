@@ -15,7 +15,7 @@ public class AppointmentMapper
                 appointmentDto.getId(),
                 appointmentDto.getName(),
                 appointmentDto.getSurname(),
-                BigDecimal.valueOf(Double.parseDouble(appointmentDto.getPesel())),
+                BigDecimal.valueOf(Double.parseDouble(appointmentDto.getPesel())).setScale(0),
                 appointmentDto.getEmail(),
                 appointmentDto.getDate(),
                 new Dentist(

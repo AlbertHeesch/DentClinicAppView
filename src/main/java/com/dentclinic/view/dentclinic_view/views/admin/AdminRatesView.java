@@ -7,6 +7,7 @@ import com.dentclinic.view.dentclinic_view.service.RateService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -14,7 +15,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.math.BigDecimal;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/rate", layout = AdminLayout.class)
@@ -39,11 +39,18 @@ public class AdminRatesView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        Button addRateButton = new Button("Add rate");
+        Button addRateButton = new Button("Add a rate");
         addRateButton.addClickListener(click -> addRate());
 
         HorizontalLayout toolbar = new HorizontalLayout(addRateButton);
         toolbar.addClassName("toolbar");
+
+        if(!(api.fetchAllRates().size() == 0))
+        {
+            Paragraph editInfoText = new Paragraph("In order to edit an element, click it.");
+            toolbar.add(editInfoText);
+        }
+
         return toolbar;
     }
 
@@ -59,12 +66,7 @@ public class AdminRatesView extends VerticalLayout {
                 editRate(event.getValue()));
     }
     private void updateList() {
-        if(api.fetchAllRates().size() == 0)
-        {
-            grid.setItems(new Rate(0L, "No rates found", new BigDecimal("0.0")));
-        } else {
             grid.setItems(api.fetchAllRates());
-        }
     }
 
     private Component getContent() {

@@ -8,6 +8,7 @@ import com.dentclinic.view.dentclinic_view.service.ServicesService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -15,7 +16,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.math.BigDecimal;
+
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/service", layout = AdminLayout.class)
@@ -41,11 +42,18 @@ public class AdminServicesView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        Button addServiceButton = new Button("Add service");
+        Button addServiceButton = new Button("Add a service");
         addServiceButton.addClickListener(click -> addService());
 
         HorizontalLayout toolbar = new HorizontalLayout(addServiceButton);
         toolbar.addClassName("toolbar");
+
+        if(!(api.fetchAllServices().size() == 0))
+        {
+            Paragraph editInfoText = new Paragraph("In order to edit an element, click it.");
+            toolbar.add(editInfoText);
+        }
+
         return toolbar;
     }
 
@@ -56,15 +64,13 @@ public class AdminServicesView extends VerticalLayout {
         grid.addColumn(Services::getDescription).setHeader("Service");
         grid.addColumn(Services::getCost).setHeader("Cost");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        grid.asSingleSelect().addValueChangeListener(event ->
+                editService(event.getValue()));
     }
 
     private void updateList() {
-        if(api.fetchAllServices().size() == 0)
-        {
-            grid.setItems(new Services(0L, "No services found", new BigDecimal("0.0")));
-        } else {
             grid.setItems(api.fetchAllServices());
-        }
     }
 
     private Component getContent() {
@@ -81,7 +87,7 @@ public class AdminServicesView extends VerticalLayout {
         form.setWidth("25em");
         form.addListener(ServicesForm.SaveEvent.class, this::saveService);
         form.addListener(ServicesForm.DeleteEvent.class, this::deleteService);
-        form.addListener(RateForm.CloseEvent.class, e -> closeEditor());
+        form.addListener(ServicesForm.CloseEvent.class, e -> closeEditor());
     }
 
     private void saveService(ServicesForm.SaveEvent event) {

@@ -1,8 +1,6 @@
 package com.dentclinic.view.dentclinic_view.views.admin;
 
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
-import com.dentclinic.view.dentclinic_view.domain.Dentist;
-import com.dentclinic.view.dentclinic_view.domain.Services;
 import com.dentclinic.view.dentclinic_view.form.AppointmentForm;
 import com.dentclinic.view.dentclinic_view.layout.AdminLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
@@ -11,6 +9,7 @@ import com.dentclinic.view.dentclinic_view.service.ServicesService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -20,8 +19,6 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/appointment", layout = AdminLayout.class)
@@ -59,14 +56,17 @@ public class AdminAppointmentsView extends VerticalLayout {
         grid.addColumn(Appointment::getSurname).setHeader("Surname");
         grid.addColumn(Appointment::getPesel).setHeader("Pesel");
         grid.addColumn(Appointment::getEmail).setHeader("Email");
-        grid.addColumn(Appointment::getDate).setHeader("Date");
-        grid.addColumn(appointmentDto -> appointmentDto.getDentist().getSurname()).setHeader("Dentist");
-        grid.addColumn(appointmentDto -> appointmentDto.getService().getDescription()).setHeader("Service");
+        grid.addColumn(appointment -> appointment.getDate().toString().replace("T", " ")).setHeader("Date");
+        grid.addColumn(appointment -> appointment.getDentist().getSurname()).setHeader("Dentist");
+        grid.addColumn(appointment -> appointment.getService().getDescription()).setHeader("Service");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        grid.asSingleSelect().addValueChangeListener(event ->
+                editAppointment(event.getValue()));
     }
 
     public HorizontalLayout getToolbar() {
-        Button addRateButton = new Button("Add rate");
+        Button addRateButton = new Button("Add an appointment");
         addRateButton.addClickListener(click -> addAppointment());
 
         filterText.setPlaceholder("Filter by surname...");
@@ -76,17 +76,18 @@ public class AdminAppointmentsView extends VerticalLayout {
 
         HorizontalLayout toolbar = new HorizontalLayout(filterText, addRateButton);
         toolbar.addClassName("toolbar");
+
+        if(!(api.fetchAllAppointments().size() == 0))
+        {
+            Paragraph editInfoText = new Paragraph("In order to edit an element, click it.");
+            toolbar.add(editInfoText);
+        }
+
         return toolbar;
     }
 
     private void updateList() {
-        if(api.fetchAllAppointments().size() == 0) {
-            grid.setItems(new Appointment(0L, " ", "No appointments found", new BigDecimal(" "), " ", LocalDate.now(),
-                    new Dentist(0L, " ", " ", LocalDate.now()),
-                    new Services(0L, " ", new BigDecimal("0.0"))));
-        } else {
             grid.setItems(api.fetchFilteredAppointments(filterText.getValue()));
-        }
     }
 
     private Component getContent() {

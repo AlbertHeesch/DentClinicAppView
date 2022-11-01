@@ -9,7 +9,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.datetimepicker.DateTimePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.BigDecimalField;
@@ -20,6 +20,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,7 +30,7 @@ public class AppointmentForm extends FormLayout
     private final TextField surname = new TextField("Surname");
     private final BigDecimalField pesel = new BigDecimalField("PESEL");
     private final EmailField email = new EmailField("Email address");
-    private final DatePicker date = new DatePicker("Appointment date");
+    private final DateTimePicker date = new DateTimePicker("Appointment date");
     private final ComboBox<Dentist> dentist = new ComboBox<>("Dentist");
     private final ComboBox<Services> service = new ComboBox<>("Service");
     Binder<Appointment> binder = new BeanValidationBinder<>(Appointment.class);
@@ -51,14 +52,17 @@ public class AppointmentForm extends FormLayout
 
         binder.bindInstanceFields(this);
 
+        email.setErrorMessage("Enter a valid email address");
+        email.setClearButtonVisible(true);
+        email.setInvalid(true);
+
         add(name, surname, pesel, email, date, dentist, service, createButtonsLayout());
     }
 
     private void configureDatePicker()
     {
         date.setLocale(new Locale("pl", "PL"));
-        date.setPlaceholder("DD.MM.YYYY");
-        date.setHelperText("Format: DD.MM.YYYY");
+        date.setMin(LocalDateTime.now());
     }
 
     private HorizontalLayout createButtonsLayout() {

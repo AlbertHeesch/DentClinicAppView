@@ -42,7 +42,7 @@ public class AllDentistView extends VerticalLayout
         grid.addColumn(Appointment::getSurname).setHeader("Surname");
         grid.addColumn(Appointment::getPesel).setHeader("Pesel");
         grid.addColumn(Appointment::getEmail).setHeader("Email");
-        grid.addColumn(Appointment::getDate).setHeader("Date");
+        grid.addColumn(appointment -> appointment.getDate().toString().replace("T", " ")).setHeader("Date");
         grid.addColumn(appointmentDto -> appointmentDto.getService().getDescription()).setHeader("Service");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
