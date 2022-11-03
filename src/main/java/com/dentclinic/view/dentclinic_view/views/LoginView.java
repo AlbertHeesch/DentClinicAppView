@@ -1,5 +1,8 @@
 package com.dentclinic.view.dentclinic_view.views;
 
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.login.LoginForm;
@@ -16,6 +19,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed;
 public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
     private final LoginForm login = new LoginForm();
+    private Button back = new Button("Back");
 
     public LoginView(){
         addClassName("login-view");
@@ -25,10 +29,14 @@ public class LoginView extends VerticalLayout implements BeforeEnterObserver {
 
         login.setForgotPasswordButtonVisible(false);
         login.setAction("login");
-        add(new H1("DentClinicApp"), login);
+
+        back.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        back.addClickShortcut(Key.ESCAPE);
+        back.addClickListener(event -> back.getUI().ifPresent(ui -> ui.navigate("/home")));
+
+        add(new H1("DentClinicApp"), login, back);
         add(new Paragraph("Username- admin, password- userpass FOR ADMIN"));
         add(new Paragraph("Username- user, password- userpass FOR USER"));
-        add(new Paragraph());
     }
 
     @Override

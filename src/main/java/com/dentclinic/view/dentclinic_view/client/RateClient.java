@@ -1,9 +1,11 @@
 package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.RateDto;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -41,40 +43,30 @@ public class RateClient {
     }
 
     public void addRate(RateDto rateDto) {
-        String BASE_URL = "http://localhost:8082/v1/rate";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", rateDto.getId())
-                .queryParam("name", rateDto.getName())
-                .queryParam("value", rateDto.getValue())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8082/v1/rate";
+//        JSONObject request = new JSONObject();
+//        request.put("name", rateDto.getName());
+//        request.put("value", rateDto.getValue());
 
-        restTemplate.postForObject(url, null, RateDto.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<RateDto> entity = new HttpEntity<>(rateDto, headers);
+
+      restTemplate.exchange(url, HttpMethod.POST, entity, RateDto.class);
     }
 
     public void updateRate(RateDto rateDto) {
-        String BASE_URL = "http://localhost:8082/v1/rate";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", rateDto.getId())
-                .queryParam("name", rateDto.getName())
-                .queryParam("value", rateDto.getValue())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8082/v1/rate";
 
-        restTemplate.put(url, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<RateDto> entity = new HttpEntity<>(rateDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.PUT, entity, RateDto.class);
     }
 
     public void deleteRate(RateDto rateDto) {
-        String BASE_URL = "http://localhost:8082/v1/rate";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", rateDto.getId())
-                .queryParam("name", rateDto.getName())
-                .queryParam("value", rateDto.getValue())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8082/v1/rate/" + rateDto.getId().toString();
 
         restTemplate.delete(url);
     }

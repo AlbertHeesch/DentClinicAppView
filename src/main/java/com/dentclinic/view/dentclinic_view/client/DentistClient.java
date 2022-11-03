@@ -3,9 +3,14 @@ package com.dentclinic.view.dentclinic_view.client;
 import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
 import com.dentclinic.view.dentclinic_view.domain.DentistDto;
 import com.dentclinic.view.dentclinic_view.domain.RateDto;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -43,43 +48,31 @@ public class DentistClient {
     }
 
     public void addDentist(DentistDto dentistDto) {
-        String BASE_URL = "http://localhost:8082/v1/dentist";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", dentistDto.getId())
-                .queryParam("name", dentistDto.getName())
-                .queryParam("surname", dentistDto.getSurname())
-                .queryParam("experience", dentistDto.getExperience())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/dentist";
+//        JSONObject request = new JSONObject();
+//        request.put("name", dentistDto.getName());
+//        request.put("surname", dentistDto.getSurname());
+//        request.put("experience", dentistDto.getExperience());
 
-        restTemplate.postForObject(url, null, DentistDto.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<DentistDto> entity = new HttpEntity<>(dentistDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.POST, entity, DentistDto.class);
     }
 
     public void updateDentist(DentistDto dentistDto) {
-        String BASE_URL = "http://localhost:8082/v1/dentist";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", dentistDto.getId())
-                .queryParam("name", dentistDto.getName())
-                .queryParam("surname", dentistDto.getSurname())
-                .queryParam("experience", dentistDto.getExperience())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/dentist";
 
-        restTemplate.put(url, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<DentistDto> entity = new HttpEntity<>(dentistDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.PUT, entity, DentistDto.class);
     }
 
     public void deleteDentist(DentistDto dentistDto) {
-        String BASE_URL = "http://localhost:8082/v1/dentist";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", dentistDto.getId())
-                .queryParam("name", dentistDto.getName())
-                .queryParam("surname", dentistDto.getSurname())
-                .queryParam("experience", dentistDto.getExperience())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/dentist/" + dentistDto.getId().toString();
 
         restTemplate.delete(url);
     }

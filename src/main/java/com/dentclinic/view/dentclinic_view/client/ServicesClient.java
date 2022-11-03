@@ -1,10 +1,14 @@
 package com.dentclinic.view.dentclinic_view.client;
 
-import com.dentclinic.view.dentclinic_view.domain.RateDto;
 import com.dentclinic.view.dentclinic_view.domain.ServicesDto;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -42,40 +46,30 @@ public class ServicesClient {
     }
 
     public void addService(ServicesDto servicesDto) {
-        String BASE_URL = "http://localhost:8082/v1/service";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", servicesDto.getId())
-                .queryParam("description", servicesDto.getDescription())
-                .queryParam("cost", servicesDto.getCost())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/service";
+//        JSONObject request = new JSONObject();
+//        request.put("description", servicesDto.getDescription());
+//        request.put("cost", servicesDto.getCost());
 
-        restTemplate.postForObject(url, null, ServicesDto.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<ServicesDto> entity = new HttpEntity<>(servicesDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.POST, entity, ServicesDto.class);
     }
 
     public void updateService(ServicesDto servicesDto) {
-        String BASE_URL = "http://localhost:8082/v1/service";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", servicesDto.getId())
-                .queryParam("description", servicesDto.getDescription())
-                .queryParam("cost", servicesDto.getCost())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/service";
 
-        restTemplate.put(url, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<ServicesDto> entity = new HttpEntity<>(servicesDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.PUT, entity, ServicesDto.class);
     }
 
     public void deleteService(ServicesDto servicesDto) {
-        String BASE_URL = "http://localhost:8082/v1/service";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", servicesDto.getId())
-                .queryParam("description", servicesDto.getDescription())
-                .queryParam("cost", servicesDto.getCost())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/service/" + servicesDto.getId().toString();
 
         restTemplate.delete(url);
     }

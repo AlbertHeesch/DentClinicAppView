@@ -20,8 +20,8 @@ import java.time.LocalDate;
 import java.util.Locale;
 
 public class DentistForm extends FormLayout {
-    TextField name = new TextField("Rate Name");
-    TextField surname = new TextField("Rate Surname");
+    TextField name = new TextField("Name");
+    TextField surname = new TextField("Surname");
     DatePicker experience = new DatePicker("Date of employment");
     Binder<Dentist> binder = new BeanValidationBinder<>(Dentist.class);
     Dentist dentist;
@@ -57,8 +57,8 @@ public class DentistForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new DentistForm.DeleteEvent(this, dentist)));
-        close.addClickListener(event -> fireEvent(new DentistForm.CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, dentist)));
+        close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
@@ -72,7 +72,7 @@ public class DentistForm extends FormLayout {
     private void validateAndSave() {
         try {
             binder.writeBean(dentist);
-            fireEvent(new DentistForm.SaveEvent(this, dentist));
+            fireEvent(new SaveEvent(this, dentist));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
@@ -91,20 +91,20 @@ public class DentistForm extends FormLayout {
         }
     }
 
-    public static class SaveEvent extends DentistForm.ContactFormEvent {
+    public static class SaveEvent extends ContactFormEvent {
         SaveEvent(DentistForm source, Dentist dentist) {
             super(source, dentist);
         }
     }
 
-    public static class DeleteEvent extends DentistForm.ContactFormEvent {
+    public static class DeleteEvent extends ContactFormEvent {
         DeleteEvent(DentistForm source, Dentist dentist) {
             super(source, dentist);
         }
 
     }
 
-    public static class CloseEvent extends DentistForm.ContactFormEvent {
+    public static class CloseEvent extends ContactFormEvent {
         CloseEvent(DentistForm source) {
             super(source, null);
         }

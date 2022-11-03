@@ -2,9 +2,14 @@ package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
 import com.dentclinic.view.dentclinic_view.domain.RateDto;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -42,55 +47,36 @@ public class AppointmentClient {
     }
 
     public void addAppointment(AppointmentDto appointmentDto) {
-        String BASE_URL = "http://localhost:8082/v1/appointment";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", appointmentDto.getId())
-                .queryParam("name", appointmentDto.getName())
-                .queryParam("surname", appointmentDto.getSurname())
-                .queryParam("pesel", appointmentDto.getPesel())
-                .queryParam("email", appointmentDto.getEmail())
-                .queryParam("date", appointmentDto.getDate())
-                .queryParam("dentist", appointmentDto.getDentist())
-                .queryParam("service", appointmentDto.getService())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/appointment";
 
-        restTemplate.postForObject(url, null, AppointmentDto.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.POST, entity, AppointmentDto.class);
     }
 
     public void updateAppointment(AppointmentDto appointmentDto) {
-        String BASE_URL = "http://localhost:8082/v1/appointment";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", appointmentDto.getId())
-                .queryParam("name", appointmentDto.getName())
-                .queryParam("surname", appointmentDto.getSurname())
-                .queryParam("pesel", appointmentDto.getPesel())
-                .queryParam("email", appointmentDto.getEmail())
-                .queryParam("date", appointmentDto.getDate())
-                .queryParam("dentist", appointmentDto.getDentist())
-                .queryParam("service", appointmentDto.getService())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/appointment";
+//        JSONObject request = new JSONObject();
+//        request.put("id", appointmentDto.getId());
+//        request.put("name", appointmentDto.getName());
+//        request.put("surname", appointmentDto.getSurname());
+//        request.put("pesel", appointmentDto.getPesel());
+//        request.put("email", appointmentDto.getEmail());
+//        request.put("date", appointmentDto.getDate().toString());
+//        request.put("dentist", appointmentDto.getDentist());
+//        request.put("service", appointmentDto.getService());
 
-        restTemplate.put(url, null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
+
+        restTemplate.exchange(url, HttpMethod.PUT, entity, AppointmentDto.class);
     }
 
     public void deleteAppointment(AppointmentDto appointmentDto) {
-        String BASE_URL = "http://localhost:8082/v1/appointment";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                .queryParam("id", appointmentDto.getId())
-                .queryParam("name", appointmentDto.getName())
-                .queryParam("surname", appointmentDto.getSurname())
-                .queryParam("pesel", appointmentDto.getPesel())
-                .queryParam("email", appointmentDto.getEmail())
-                .queryParam("date", appointmentDto.getDate())
-                .queryParam("dentist", appointmentDto.getDentist())
-                .queryParam("service", appointmentDto.getService())
-                .build()
-                .encode()
-                .toUri();
+        String url = "http://localhost:8080/v1/appointment/" + appointmentDto.getId().toString();
 
         restTemplate.delete(url);
     }

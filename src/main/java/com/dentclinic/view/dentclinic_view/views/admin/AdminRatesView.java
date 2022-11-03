@@ -15,6 +15,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/rate", layout = AdminLayout.class)
@@ -87,7 +89,14 @@ public class AdminRatesView extends VerticalLayout {
     }
 
     private void saveRate(RateForm.SaveEvent event) {
-        api.saveRate(event.getRate());
+        List<Rate> sameIdRateList = api.fetchAllRates().stream()
+                        .filter(rate -> rate.getId().equals(event.getRate().getId()))
+                                .collect(Collectors.toList());
+
+        if(sameIdRateList.size() == 0) {
+            api.saveRate(event.getRate());
+        } else {
+            api.updateRate(event.getRate());}
         updateList();
         closeEditor();
     }

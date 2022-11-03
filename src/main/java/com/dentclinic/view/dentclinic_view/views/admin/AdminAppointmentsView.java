@@ -19,6 +19,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/appointment", layout = AdminLayout.class)
@@ -66,15 +68,15 @@ public class AdminAppointmentsView extends VerticalLayout {
     }
 
     public HorizontalLayout getToolbar() {
-        Button addRateButton = new Button("Add an appointment");
-        addRateButton.addClickListener(click -> addAppointment());
+        Button addAppointmentButton = new Button("Add an appointment");
+        addAppointmentButton.addClickListener(click -> addAppointment());
 
         filterText.setPlaceholder("Filter by surname...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
         filterText.addValueChangeListener(e -> updateList());
 
-        HorizontalLayout toolbar = new HorizontalLayout(filterText, addRateButton);
+        HorizontalLayout toolbar = new HorizontalLayout(filterText, addAppointmentButton);
         toolbar.addClassName("toolbar");
 
         if(!(api.fetchAllAppointments().size() == 0))
@@ -108,7 +110,14 @@ public class AdminAppointmentsView extends VerticalLayout {
     }
 
     private void saveAppointment(AppointmentForm.SaveEvent event) {
-        api.saveAppointment(event.getAppointment());
+        List<Appointment> sameIdAppointmentList = api.fetchAllAppointments().stream()
+                .filter(rate -> rate.getId().equals(event.getAppointment().getId()))
+                .collect(Collectors.toList());
+
+        if(sameIdAppointmentList.size() == 0) {
+            api.saveAppointment(event.getAppointment());
+        } else {
+            api.updateAppointment(event.getAppointment());}
         updateList();
         closeEditor();
     }

@@ -43,8 +43,8 @@ public class ServicesForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new ServicesForm.DeleteEvent(this, service)));
-        close.addClickListener(event -> fireEvent(new ServicesForm.CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, service)));
+        close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
@@ -58,7 +58,7 @@ public class ServicesForm extends FormLayout {
     private void validateAndSave() {
         try {
             binder.writeBean(service);
-            fireEvent(new ServicesForm.SaveEvent(this, service));
+            fireEvent(new SaveEvent(this, service));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
@@ -77,20 +77,20 @@ public class ServicesForm extends FormLayout {
         }
     }
 
-    public static class SaveEvent extends ServicesForm.ContactFormEvent {
+    public static class SaveEvent extends ContactFormEvent {
         SaveEvent(ServicesForm source, Services services) {
             super(source, services);
         }
     }
 
-    public static class DeleteEvent extends ServicesForm.ContactFormEvent {
+    public static class DeleteEvent extends ContactFormEvent {
         DeleteEvent(ServicesForm source, Services services) {
             super(source, services);
         }
 
     }
 
-    public static class CloseEvent extends ServicesForm.ContactFormEvent {
+    public static class CloseEvent extends ContactFormEvent {
         CloseEvent(ServicesForm source) {
             super(source, null);
         }

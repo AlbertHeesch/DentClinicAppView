@@ -34,7 +34,7 @@ public class AppointmentForm extends FormLayout
     private final ComboBox<Dentist> dentist = new ComboBox<>("Dentist");
     private final ComboBox<Services> service = new ComboBox<>("Service");
     Binder<Appointment> binder = new BeanValidationBinder<>(Appointment.class);
-    Appointment appointment;
+    private Appointment appointment;
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
@@ -74,8 +74,8 @@ public class AppointmentForm extends FormLayout
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new AppointmentForm.DeleteEvent(this, appointment)));
-        close.addClickListener(event -> fireEvent(new AppointmentForm.CloseEvent(this)));
+        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, appointment)));
+        close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
@@ -89,7 +89,7 @@ public class AppointmentForm extends FormLayout
     private void validateAndSave() {
         try {
             binder.writeBean(appointment);
-            fireEvent(new AppointmentForm.SaveEvent(this, appointment));
+            fireEvent(new SaveEvent(this, appointment));
         } catch (ValidationException e) {
             e.printStackTrace();
         }
@@ -108,20 +108,20 @@ public class AppointmentForm extends FormLayout
         }
     }
 
-    public static class SaveEvent extends AppointmentForm.ContactFormEvent {
+    public static class SaveEvent extends ContactFormEvent {
         SaveEvent(AppointmentForm source, Appointment appointment) {
             super(source, appointment);
         }
     }
 
-    public static class DeleteEvent extends AppointmentForm.ContactFormEvent {
+    public static class DeleteEvent extends ContactFormEvent {
         DeleteEvent(AppointmentForm source, Appointment appointment) {
             super(source, appointment);
         }
 
     }
 
-    public static class CloseEvent extends AppointmentForm.ContactFormEvent {
+    public static class CloseEvent extends ContactFormEvent {
         CloseEvent(AppointmentForm source) {
             super(source, null);
         }

@@ -15,6 +15,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RolesAllowed({ "ROLE_ADMIN" })
 @Route(value="admin/dentist", layout = AdminLayout.class)
@@ -39,10 +41,10 @@ public class AdminDentistsView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolbar() {
-        Button addRateButton = new Button("Add a dentist");
-        addRateButton.addClickListener(click -> addDentist());
+        Button addDentistButton = new Button("Add a dentist");
+        addDentistButton.addClickListener(click -> addDentist());
 
-        HorizontalLayout toolbar = new HorizontalLayout(addRateButton);
+        HorizontalLayout toolbar = new HorizontalLayout(addDentistButton);
         toolbar.addClassName("toolbar");
 
         if(!(api.fetchAllDentists().size() == 0))
@@ -89,7 +91,14 @@ public class AdminDentistsView extends VerticalLayout {
     }
 
     private void saveDentist(DentistForm.SaveEvent event) {
-        api.saveDentist(event.getDentist());
+        List<Dentist> sameIdDentistList = api.fetchAllDentists().stream()
+                .filter(rate -> rate.getId().equals(event.getDentist().getId()))
+                .collect(Collectors.toList());
+
+        if(sameIdDentistList.size() == 0) {
+            api.saveDentist(event.getDentist());
+        } else {
+            api.updateDentist(event.getDentist());}
         updateList();
         closeEditor();
     }

@@ -38,6 +38,9 @@ public class HomeView extends VerticalLayout {
     private void createButtons()
     {
         Button patientButton = new Button("Patient");
+        patientButton.addClickListener(e ->
+                patientButton.getUI().ifPresent(ui ->
+                                ui.navigate("/patient")));
         Button employeeButton = new Button("Employee");
         employeeButton.addClickListener(e ->
                 employeeButton.getUI().ifPresent(ui ->

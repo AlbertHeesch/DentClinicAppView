@@ -1,5 +1,6 @@
 package com.dentclinic.view.dentclinic_view.views.admin;
 
+import com.dentclinic.view.dentclinic_view.domain.Rate;
 import com.dentclinic.view.dentclinic_view.domain.Services;
 import com.dentclinic.view.dentclinic_view.form.RateForm;
 import com.dentclinic.view.dentclinic_view.form.ServicesForm;
@@ -16,6 +17,8 @@ import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RolesAllowed({ "ROLE_ADMIN" })
@@ -91,7 +94,14 @@ public class AdminServicesView extends VerticalLayout {
     }
 
     private void saveService(ServicesForm.SaveEvent event) {
-        api.saveService(event.getService());
+        List<Services> sameIdServiceList = api.fetchAllServices().stream()
+                .filter(rate -> rate.getId().equals(event.getService().getId()))
+                .collect(Collectors.toList());
+
+        if(sameIdServiceList.size() == 0) {
+            api.saveService(event.getService());
+        } else {
+            api.updateService(event.getService());}
         updateList();
         closeEditor();
     }
