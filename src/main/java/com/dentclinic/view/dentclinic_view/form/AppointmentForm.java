@@ -62,7 +62,7 @@ public class AppointmentForm extends FormLayout
     private void configureDatePicker()
     {
         date.setLocale(new Locale("pl", "PL"));
-        date.setMin(LocalDateTime.now());
+//        date.setMin(LocalDateTime.now().plusHours(1L));
     }
 
     private HorizontalLayout createButtonsLayout() {

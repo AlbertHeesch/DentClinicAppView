@@ -3,7 +3,6 @@ package com.dentclinic.view.dentclinic_view.views;
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
 import com.dentclinic.view.dentclinic_view.domain.Dentist;
 import com.dentclinic.view.dentclinic_view.domain.Services;
-import com.dentclinic.view.dentclinic_view.form.AppointmentForm;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.dentclinic.view.dentclinic_view.service.DentistService;
 import com.dentclinic.view.dentclinic_view.service.ServicesService;

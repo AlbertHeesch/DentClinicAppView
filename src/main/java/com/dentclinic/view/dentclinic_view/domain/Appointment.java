@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class Appointment {
     @NotEmpty
     private String email;
     @Future
+    @NotNull
     private LocalDateTime date;
     private Dentist dentist;
     private Services service;

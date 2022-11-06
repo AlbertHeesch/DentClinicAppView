@@ -1,7 +1,6 @@
 package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.RateDto;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +43,6 @@ public class RateClient {
 
     public void addRate(RateDto rateDto) {
         String url = "http://localhost:8082/v1/rate";
-//        JSONObject request = new JSONObject();
-//        request.put("name", rateDto.getName());
-//        request.put("value", rateDto.getValue());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

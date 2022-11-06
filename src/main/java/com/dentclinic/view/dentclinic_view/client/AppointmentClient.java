@@ -1,8 +1,6 @@
 package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.AppointmentDto;
-import com.dentclinic.view.dentclinic_view.domain.RateDto;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,26 +56,16 @@ public class AppointmentClient {
 
     public void updateAppointment(AppointmentDto appointmentDto) {
         String url = "http://localhost:8080/v1/appointment";
-//        JSONObject request = new JSONObject();
-//        request.put("id", appointmentDto.getId());
-//        request.put("name", appointmentDto.getName());
-//        request.put("surname", appointmentDto.getSurname());
-//        request.put("pesel", appointmentDto.getPesel());
-//        request.put("email", appointmentDto.getEmail());
-//        request.put("date", appointmentDto.getDate().toString());
-//        request.put("dentist", appointmentDto.getDentist());
-//        request.put("service", appointmentDto.getService());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
-
+        System.out.println(entity);
         restTemplate.exchange(url, HttpMethod.PUT, entity, AppointmentDto.class);
     }
 
     public void deleteAppointment(AppointmentDto appointmentDto) {
         String url = "http://localhost:8080/v1/appointment/" + appointmentDto.getId().toString();
-
         restTemplate.delete(url);
     }
 }

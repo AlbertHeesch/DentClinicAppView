@@ -18,6 +18,6 @@ public class AppointmentDto {
     private String pesel;
     private String email;
     private LocalDateTime date;
-    private DentistDto dentist;
-    private ServicesDto service;
+    private Long dentistId;
+    private Long serviceId;
 }

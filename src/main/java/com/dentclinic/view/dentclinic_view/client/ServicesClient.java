@@ -1,7 +1,6 @@
 package com.dentclinic.view.dentclinic_view.client;
 
 import com.dentclinic.view.dentclinic_view.domain.ServicesDto;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +46,6 @@ public class ServicesClient {
 
     public void addService(ServicesDto servicesDto) {
         String url = "http://localhost:8080/v1/service";
-//        JSONObject request = new JSONObject();
-//        request.put("description", servicesDto.getDescription());
-//        request.put("cost", servicesDto.getCost());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
