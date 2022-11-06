@@ -29,6 +29,8 @@ public class Appointment {
     @Future
     @NotNull
     private LocalDateTime date;
+    @NotNull
     private Dentist dentist;
+    @NotNull
     private Services service;
 }

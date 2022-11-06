@@ -20,7 +20,11 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Locale;
 
@@ -62,7 +66,26 @@ public class AppointmentForm extends FormLayout
     private void configureDatePicker()
     {
         date.setLocale(new Locale("pl", "PL"));
-//        date.setMin(LocalDateTime.now().plusHours(1L));
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
+        String nextDay = formatter.format(LocalDate.now().plusDays(1));
+        date.getElement().executeJs("this.initialPosition = $0", nextDay);
+        date.setHelperText("Open Mondays-Fridays, 8:00-12:00, 13:00-16:00");
+//        binder.forField(date).withValidator(startDateTime -> {
+//                    boolean validWeekDay = startDateTime.getDayOfWeek().getValue() >= 1
+//                            && startDateTime.getDayOfWeek().getValue() <= 5;
+//                    return validWeekDay;
+//                }, "The selected day of week is not available")
+//                .withValidator(startDateTime -> {
+//                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
+//                            startDateTime.getMinute());
+//                    boolean validTime = !(LocalTime.of(8, 0).isAfter(startTime)
+//                            || (LocalTime.of(12, 0).isBefore(startTime)
+//                            && LocalTime.of(13, 0).isAfter(startTime))
+//                            || LocalTime.of(16, 0).isBefore(startTime));
+//                    return validTime;
+//                }, "The selected time is not available")
+//                .bind(Appointment::getDate,
+//                        Appointment::setDate);
     }
 
     private HorizontalLayout createButtonsLayout() {

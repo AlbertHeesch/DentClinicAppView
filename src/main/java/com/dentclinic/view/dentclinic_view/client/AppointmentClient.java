@@ -50,7 +50,6 @@ public class AppointmentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
-
         restTemplate.exchange(url, HttpMethod.POST, entity, AppointmentDto.class);
     }
 
@@ -60,7 +59,6 @@ public class AppointmentClient {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
-        System.out.println(entity);
         restTemplate.exchange(url, HttpMethod.PUT, entity, AppointmentDto.class);
     }
 
