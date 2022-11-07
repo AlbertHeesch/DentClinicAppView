@@ -107,6 +107,7 @@ public class AdminAppointmentsView extends VerticalLayout {
         form.addListener(AppointmentForm.SaveEvent.class, this::saveAppointment);
         form.addListener(AppointmentForm.DeleteEvent.class, this::deleteAppointment);
         form.addListener(AppointmentForm.CloseEvent.class, e -> closeEditor());
+        form.getBack().setVisible(false);
     }
 
     private void saveAppointment(AppointmentForm.SaveEvent event) {

@@ -21,10 +21,9 @@ import com.vaadin.flow.data.binder.ValidationException;
 import com.vaadin.flow.shared.Registration;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,6 +42,7 @@ public class AppointmentForm extends FormLayout
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
+    private Button back = new Button("Back");
 
     public AppointmentForm(List<Dentist> dentists, List<Services> services){
         addClassName("appointment-form");
@@ -53,7 +53,6 @@ public class AppointmentForm extends FormLayout
         service.setItemLabelGenerator(Services::getDescription);
 
         configureDatePicker();
-
         binder.bindInstanceFields(this);
 
         email.setErrorMessage("Enter a valid email address");
@@ -66,26 +65,21 @@ public class AppointmentForm extends FormLayout
     private void configureDatePicker()
     {
         date.setLocale(new Locale("pl", "PL"));
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
-        String nextDay = formatter.format(LocalDate.now().plusDays(1));
-        date.getElement().executeJs("this.initialPosition = $0", nextDay);
-        date.setHelperText("Open Mondays-Fridays, 8:00-12:00, 13:00-16:00");
-//        binder.forField(date).withValidator(startDateTime -> {
-//                    boolean validWeekDay = startDateTime.getDayOfWeek().getValue() >= 1
-//                            && startDateTime.getDayOfWeek().getValue() <= 5;
-//                    return validWeekDay;
-//                }, "The selected day of week is not available")
-//                .withValidator(startDateTime -> {
-//                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
-//                            startDateTime.getMinute());
-//                    boolean validTime = !(LocalTime.of(8, 0).isAfter(startTime)
-//                            || (LocalTime.of(12, 0).isBefore(startTime)
-//                            && LocalTime.of(13, 0).isAfter(startTime))
-//                            || LocalTime.of(16, 0).isBefore(startTime));
-//                    return validTime;
-//                }, "The selected time is not available")
-//                .bind(Appointment::getDate,
-//                        Appointment::setDate);
+        date.setHelperText("Open Mondays-Fridays, 8:00-16:00");
+        date.setDatePlaceholder("Date");
+        date.setTimePlaceholder("Time");
+        date.setMin(LocalDateTime.now());
+        date.setMax(LocalDateTime.now().plusDays(14));
+        binder.forField(date).withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
+                && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
+                .withValidator(startDateTime -> {
+                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
+                            startDateTime.getMinute());
+                    return !(LocalTime.of(8, 0).isAfter(startTime)
+                            || LocalTime.of(15, 0).isBefore(startTime));
+                }, "The selected time is not available")
+                .bind(Appointment::getDate,
+                        Appointment::setDate);
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -100,8 +94,12 @@ public class AppointmentForm extends FormLayout
         delete.addClickListener(event -> fireEvent(new DeleteEvent(this, appointment)));
         close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
+        back.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        back.addClickShortcut(Key.ESCAPE);
+        back.addClickListener(event -> back.getUI().ifPresent(ui -> ui.navigate("/home")));
+
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
-        return new HorizontalLayout(save, delete, close);
+        return new HorizontalLayout(save, delete, close, back);
     }
 
     public void setAppointment(Appointment appointment) {
@@ -153,5 +151,25 @@ public class AppointmentForm extends FormLayout
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
                                                                   ComponentEventListener<T> listener) {
         return getEventBus().addListener(eventType, listener);
+    }
+
+    public Button getSave() {
+        return save;
+    }
+
+    public Button getDelete() {
+        return delete;
+    }
+
+    public Button getClose() {
+        return close;
+    }
+
+    public Button getBack() {
+        return back;
+    }
+
+    public ComboBox<Services> getService() {
+        return service;
     }
 }
