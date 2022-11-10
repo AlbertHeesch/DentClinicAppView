@@ -6,7 +6,6 @@ import com.dentclinic.view.dentclinic_view.views.admin.AdminAppointmentsView;
 import com.dentclinic.view.dentclinic_view.views.admin.AdminDentistsView;
 import com.dentclinic.view.dentclinic_view.views.admin.AdminRatesView;
 import com.dentclinic.view.dentclinic_view.views.admin.AdminServicesView;
-import com.dentclinic.view.dentclinic_view.views.dentist.AllDentistView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;

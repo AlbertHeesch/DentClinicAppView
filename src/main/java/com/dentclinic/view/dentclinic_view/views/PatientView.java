@@ -1,13 +1,15 @@
 package com.dentclinic.view.dentclinic_view.views;
 
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
+import com.dentclinic.view.dentclinic_view.domain.Rate;
+import com.dentclinic.view.dentclinic_view.domain.Services;
 import com.dentclinic.view.dentclinic_view.form.AppointmentForm;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.dentclinic.view.dentclinic_view.service.DentistService;
+import com.dentclinic.view.dentclinic_view.service.RateService;
 import com.dentclinic.view.dentclinic_view.service.ServicesService;
 import com.vaadin.flow.component.Html;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -18,8 +20,11 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route("patient")
@@ -30,17 +35,18 @@ public class PatientView extends VerticalLayout
     private final AppointmentService api;
     private final DentistService dentApi;
     private final ServicesService servicesApi;
+    private final RateService rateApi;
     private AppointmentForm form;
 
     HorizontalLayout combinedLayout = new HorizontalLayout();
     Appointment appointment = new Appointment();
-    private Long price = 0L;
 
     public PatientView(@Autowired AppointmentService appointmentService, @Autowired DentistService dentistService,
-                                 @Autowired ServicesService servicesService) {
+                                 @Autowired ServicesService servicesService, @Autowired RateService rateService) {
         api = appointmentService;
         dentApi = dentistService;
         servicesApi = servicesService;
+        rateApi = rateService;
 
         addClassName("patient-view");
         configureForm();
@@ -61,31 +67,44 @@ public class PatientView extends VerticalLayout
         form.getSave().setText("Book");
         form.getDelete().setVisible(false);
         form.getClose().setVisible(false);
+
+        List<LocalDateTime> appointmentsDateTime = api.fetchAllAppointments().stream()
+                .map(Appointment::getDate)
+                .collect(Collectors.toList());
+
+        form.getBinder().forField(form.getDate())
+                .withValidator(dateTime -> appointmentsDateTime.stream()
+                .anyMatch(listDateTime -> !listDateTime.isEqual(dateTime)), "The selected time is not available")
+                .withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
+                        && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
+                .withValidator(startDateTime -> {
+                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
+                            startDateTime.getMinute());
+                    return !(LocalTime.of(8, 0).isAfter(startTime)
+                            || LocalTime.of(15, 0).isBefore(startTime));
+                }, "The selected time is not available")
+                .bind(Appointment::getDate,
+                        Appointment::setDate);
     }
 
-    private void configureCombinedLayout()
-    {
+    private void configureCombinedLayout() {
         H1 logo = new H1("DentClinicApp");
-        Paragraph instructionText = new Paragraph("In order to create an appointment please fill in the form below.");
 
+        Paragraph instructionText = new Paragraph("In order to create an appointment please fill in the form.");
 
-        String basePriceAndTax = "<div>Base price: PLN<br>Poland tax rate: %</div>";
+        String basePriceAndTax = "<div>" + setBasePricesTxt() + setTaxTxt() + "</div>";
         Html htmlBasePriceAndTax = new Html(basePriceAndTax);
         Paragraph basePriceAndTaxP = new Paragraph(htmlBasePriceAndTax);
 
-        H2 totalPriceTxt = new H2("Total price: " + price + " PLN");
-
-        String currencies = "<div>EUR: <br>USD: <br>GBP: </div>";
+        String currencies = "<div>You can pay in our clinic using other currencies than PLN.<br>" + setRateTxt() + "</div>";
         Html htmlCurrencies = new Html(currencies);
         Paragraph currenciesPricesP = new Paragraph(htmlCurrencies);
 
-        VerticalLayout priceVerticalLayout = new VerticalLayout(basePriceAndTaxP, totalPriceTxt, currenciesPricesP);
+        VerticalLayout priceVerticalLayout = new VerticalLayout(basePriceAndTaxP, currenciesPricesP);
         VerticalLayout verticalLayout = new VerticalLayout(logo, instructionText, priceVerticalLayout);
         HorizontalLayout horizontalLayout = new HorizontalLayout(form);
-        combinedLayout.add(verticalLayout, horizontalLayout);
 
-        boolean isServicePicked = Optional.ofNullable(form.getService().getValue()).isPresent();
-        priceVerticalLayout.setVisible(!isServicePicked);
+        combinedLayout.add(verticalLayout, horizontalLayout);
     }
 
     private void saveAppointment(AppointmentForm.SaveEvent event) {
@@ -107,5 +126,79 @@ public class PatientView extends VerticalLayout
         notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
         getUI().ifPresent(ui ->
                 ui.navigate("/home"));
+    }
+
+    private List<Rate> getRateList()
+    { return new ArrayList<>(rateApi.fetchAllRates()); }
+
+    private List<Services> getServicesList()
+    { return new ArrayList<>(servicesApi.fetchAllServices()); }
+
+    private List<BigDecimal> getUsdList()
+    {
+        return new ArrayList<>(getRateList().stream()
+                .filter(name -> name.getName().equals("USD"))
+                .map(Rate::getValue)
+                .collect(Collectors.toList()));
+    }
+
+    private List<BigDecimal> getEurList()
+    {
+        return new ArrayList<>(getRateList().stream()
+                .filter(name -> name.getName().equals("EUR"))
+                .map(Rate::getValue)
+                .collect(Collectors.toList()));
+    }
+
+    private List<BigDecimal> getGbpList()
+    {
+        return new ArrayList<>(getRateList().stream()
+                .filter(name -> name.getName().equals("GBP"))
+                .map(Rate::getValue)
+                .collect(Collectors.toList()));
+    }
+
+    private List<BigDecimal> getTaxList()
+    {
+        return new ArrayList<>(getRateList().stream()
+                .filter(name -> name.getName().equals("PL_TAX"))
+                .map(Rate::getValue)
+                .collect(Collectors.toList()));
+    }
+
+    private String setRateTxt()
+    {
+        String currenciesRates = "";
+
+        if(!(getRateList().size() == 0))
+        {
+            currenciesRates = "Rates according to PLN:<br>" +
+                    "USD: " + getUsdList().get(0) + "<br>EUR: " + getEurList().get(0) + "<br>GBP: " + getGbpList().get(0);
+        }
+        return currenciesRates;
+    }
+
+    private String setTaxTxt()
+    {
+        String taxRateInfoTxt = "";
+
+        if(!(getRateList().size() == 0 || getServicesList().size() == 0))
+        {
+            taxRateInfoTxt = "<br>+ Poland tax rate: " + getTaxList().get(0) + " %";
+        }
+        return taxRateInfoTxt;
+    }
+
+    private String setBasePricesTxt()
+    {
+        String basePrices = "";
+
+        if(!(getServicesList().size() == 0)) {
+            basePrices = "Base services prices: <br>";
+            for (Services service : getServicesList()) {
+                basePrices += service.getDescription() + ": " + service.getCost() + "<br>";
+            }
+        }
+        return basePrices;
     }
 }

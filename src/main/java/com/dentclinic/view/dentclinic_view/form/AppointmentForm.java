@@ -23,7 +23,6 @@ import com.vaadin.flow.shared.Registration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -68,18 +67,18 @@ public class AppointmentForm extends FormLayout
         date.setHelperText("Open Mondays-Fridays, 8:00-16:00");
         date.setDatePlaceholder("Date");
         date.setTimePlaceholder("Time");
-        date.setMin(LocalDateTime.now());
+        date.setMin(LocalDateTime.of(LocalDate.now(), LocalTime.of(8, 0)));
         date.setMax(LocalDateTime.now().plusDays(14));
-        binder.forField(date).withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
-                && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
-                .withValidator(startDateTime -> {
-                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
-                            startDateTime.getMinute());
-                    return !(LocalTime.of(8, 0).isAfter(startTime)
-                            || LocalTime.of(15, 0).isBefore(startTime));
-                }, "The selected time is not available")
-                .bind(Appointment::getDate,
-                        Appointment::setDate);
+//        binder.forField(date).withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
+//                && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
+//                .withValidator(startDateTime -> {
+//                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
+//                            startDateTime.getMinute());
+//                    return !(LocalTime.of(8, 0).isAfter(startTime)
+//                            || LocalTime.of(15, 0).isBefore(startTime));
+//                }, "The selected time is not available")
+//                .bind(Appointment::getDate,
+//                        Appointment::setDate);
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -171,5 +170,13 @@ public class AppointmentForm extends FormLayout
 
     public ComboBox<Services> getService() {
         return service;
+    }
+
+    public Binder<Appointment> getBinder() {
+        return binder;
+    }
+
+    public DateTimePicker getDate() {
+        return date;
     }
 }

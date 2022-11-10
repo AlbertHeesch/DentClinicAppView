@@ -13,15 +13,6 @@ public class SecurityService {
 
     private static final String LOGOUT_SUCCESS_URL = "/home";
 
-    public UserDetails getAuthenticatedUser() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Object principal = context.getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return (UserDetails) principal;
-        }
-        return null;
-    }
-
     public void logout() {
         UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
         SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
