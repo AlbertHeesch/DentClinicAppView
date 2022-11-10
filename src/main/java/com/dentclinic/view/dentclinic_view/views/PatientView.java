@@ -73,8 +73,15 @@ public class PatientView extends VerticalLayout
                 .collect(Collectors.toList());
 
         form.getBinder().forField(form.getDate())
-                .withValidator(dateTime -> appointmentsDateTime.stream()
-                .anyMatch(listDateTime -> !listDateTime.isEqual(dateTime)), "The selected time is not available")
+                .withValidator(localDateTime -> {
+                    boolean isDateOk = true;
+                    for(LocalDateTime local : appointmentsDateTime)
+                    {
+                        if(local.isEqual(localDateTime))
+                        { isDateOk =false; }
+                    }
+                    return isDateOk;
+                }, "The selected time is not available")
                 .withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
                         && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
                 .withValidator(startDateTime -> {

@@ -69,16 +69,6 @@ public class AppointmentForm extends FormLayout
         date.setTimePlaceholder("Time");
         date.setMin(LocalDateTime.of(LocalDate.now(), LocalTime.of(8, 0)));
         date.setMax(LocalDateTime.now().plusDays(14));
-//        binder.forField(date).withValidator(startDateTime -> startDateTime.getDayOfWeek().getValue() >= 1
-//                && startDateTime.getDayOfWeek().getValue() <= 5, "The selected day of week is not available")
-//                .withValidator(startDateTime -> {
-//                    LocalTime startTime = LocalTime.of(startDateTime.getHour(),
-//                            startDateTime.getMinute());
-//                    return !(LocalTime.of(8, 0).isAfter(startTime)
-//                            || LocalTime.of(15, 0).isBefore(startTime));
-//                }, "The selected time is not available")
-//                .bind(Appointment::getDate,
-//                        Appointment::setDate);
     }
 
     private HorizontalLayout createButtonsLayout() {
