@@ -1,8 +1,6 @@
 package com.dentclinic.view.dentclinic_view.views.admin;
 
-import com.dentclinic.view.dentclinic_view.domain.Rate;
 import com.dentclinic.view.dentclinic_view.domain.Services;
-import com.dentclinic.view.dentclinic_view.form.RateForm;
 import com.dentclinic.view.dentclinic_view.form.ServicesForm;
 import com.dentclinic.view.dentclinic_view.layout.AdminLayout;
 import com.dentclinic.view.dentclinic_view.service.ServicesService;

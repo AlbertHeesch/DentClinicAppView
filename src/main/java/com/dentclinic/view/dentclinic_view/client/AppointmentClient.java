@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class AppointmentClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentClient.class);
     private final RestTemplate restTemplate;
+    private final String baseUrl = "http://localhost:8080/app/v1/appointment/";
 
     public List<AppointmentDto> getAppointments() {
-        String BASE_URL = "http://localhost:8080/v1/appointment";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+        URI url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .build()
                 .encode()
                 .toUri();
@@ -45,25 +45,21 @@ public class AppointmentClient {
     }
 
     public void addAppointment(AppointmentDto appointmentDto) {
-        String url = "http://localhost:8080/v1/appointment";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
-        restTemplate.exchange(url, HttpMethod.POST, entity, AppointmentDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.POST, entity, AppointmentDto.class);
     }
 
     public void updateAppointment(AppointmentDto appointmentDto) {
-        String url = "http://localhost:8080/v1/appointment";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<AppointmentDto> entity = new HttpEntity<>(appointmentDto, headers);
-        restTemplate.exchange(url, HttpMethod.PUT, entity, AppointmentDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.PUT, entity, AppointmentDto.class);
     }
 
     public void deleteAppointment(AppointmentDto appointmentDto) {
-        String url = "http://localhost:8080/v1/appointment/" + appointmentDto.getId().toString();
+        String url = baseUrl + appointmentDto.getId().toString();
         restTemplate.delete(url);
     }
 }

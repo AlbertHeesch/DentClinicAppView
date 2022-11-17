@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class DentistClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppointmentClient.class);
     private final RestTemplate restTemplate;
+    private final String baseUrl = "http://localhost:8080/app/v1/dentist/";
 
     public List<DentistDto> getDentists() {
-        String BASE_URL = "http://localhost:8080/v1/dentist";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+        URI url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .build()
                 .encode()
                 .toUri();
@@ -45,27 +45,23 @@ public class DentistClient {
     }
 
     public void addDentist(DentistDto dentistDto) {
-        String url = "http://localhost:8080/v1/dentist";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<DentistDto> entity = new HttpEntity<>(dentistDto, headers);
 
-        restTemplate.exchange(url, HttpMethod.POST, entity, DentistDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.POST, entity, DentistDto.class);
     }
 
     public void updateDentist(DentistDto dentistDto) {
-        String url = "http://localhost:8080/v1/dentist";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<DentistDto> entity = new HttpEntity<>(dentistDto, headers);
 
-        restTemplate.exchange(url, HttpMethod.PUT, entity, DentistDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.PUT, entity, DentistDto.class);
     }
 
     public void deleteDentist(DentistDto dentistDto) {
-        String url = "http://localhost:8080/v1/dentist/" + dentistDto.getId().toString();
+        String url = baseUrl + dentistDto.getId().toString();
 
         restTemplate.delete(url);
     }

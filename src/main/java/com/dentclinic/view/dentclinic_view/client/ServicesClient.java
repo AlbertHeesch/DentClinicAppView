@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 public class ServicesClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServicesClient.class);
     private final RestTemplate restTemplate;
+    private final String baseUrl = "http://localhost:8080/app/v1/service/";
 
     public List<ServicesDto> getServices() {
-        String BASE_URL = "http://localhost:8080/v1/service";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+        URI url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .build()
                 .encode()
                 .toUri();
@@ -45,27 +45,23 @@ public class ServicesClient {
     }
 
     public void addService(ServicesDto servicesDto) {
-        String url = "http://localhost:8080/v1/service";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<ServicesDto> entity = new HttpEntity<>(servicesDto, headers);
 
-        restTemplate.exchange(url, HttpMethod.POST, entity, ServicesDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.POST, entity, ServicesDto.class);
     }
 
     public void updateService(ServicesDto servicesDto) {
-        String url = "http://localhost:8080/v1/service";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<ServicesDto> entity = new HttpEntity<>(servicesDto, headers);
 
-        restTemplate.exchange(url, HttpMethod.PUT, entity, ServicesDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.PUT, entity, ServicesDto.class);
     }
 
     public void deleteService(ServicesDto servicesDto) {
-        String url = "http://localhost:8080/v1/service/" + servicesDto.getId().toString();
+        String url = baseUrl + servicesDto.getId().toString();
 
         restTemplate.delete(url);
     }

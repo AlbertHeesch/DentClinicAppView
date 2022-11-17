@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 public class RateClient {
     private static final Logger LOGGER = LoggerFactory.getLogger(RateClient.class);
     private final RestTemplate restTemplate;
+    private final String baseUrl = "http://localhost:8080/appRates/v1/rate/";
 
     public List<RateDto> getRates() {
-        String BASE_URL = "http://localhost:8082/v1/rate";
-        URI url = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+        URI url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .build()
                 .encode()
                 .toUri();
@@ -42,27 +42,23 @@ public class RateClient {
     }
 
     public void addRate(RateDto rateDto) {
-        String url = "http://localhost:8082/v1/rate";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RateDto> entity = new HttpEntity<>(rateDto, headers);
 
-      restTemplate.exchange(url, HttpMethod.POST, entity, RateDto.class);
+      restTemplate.exchange(baseUrl, HttpMethod.POST, entity, RateDto.class);
     }
 
     public void updateRate(RateDto rateDto) {
-        String url = "http://localhost:8082/v1/rate";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<RateDto> entity = new HttpEntity<>(rateDto, headers);
 
-        restTemplate.exchange(url, HttpMethod.PUT, entity, RateDto.class);
+        restTemplate.exchange(baseUrl, HttpMethod.PUT, entity, RateDto.class);
     }
 
     public void deleteRate(RateDto rateDto) {
-        String url = "http://localhost:8082/v1/rate/" + rateDto.getId().toString();
+        String url = baseUrl + rateDto.getId().toString();
 
         restTemplate.delete(url);
     }
