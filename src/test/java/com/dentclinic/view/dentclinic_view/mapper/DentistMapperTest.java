@@ -60,6 +60,7 @@ class DentistMapperTest {
         List<Dentist> dentistDtoList = mapper.mapToDentistList(dentistList);
 
         //Then
+        assertEquals(3, dentistList.size());
         assertEquals(1L, dentistDtoList.get(0).getId());
         assertEquals(2L, dentistDtoList.get(1).getId());
         assertEquals(3L, dentistDtoList.get(2).getId());

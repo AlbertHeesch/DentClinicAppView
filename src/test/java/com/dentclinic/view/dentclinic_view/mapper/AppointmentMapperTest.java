@@ -108,6 +108,7 @@ class AppointmentMapperTest {
         List<Appointment> appointmentList = mapper.mapToAppointmentList(appointmentDtoList);
 
         //Then
+        assertEquals(3, appointmentList.size());
         assertEquals(1L, appointmentList.get(0).getId());
         assertEquals(2L, appointmentList.get(1).getId());
         assertEquals(3L, appointmentList.get(2).getId());

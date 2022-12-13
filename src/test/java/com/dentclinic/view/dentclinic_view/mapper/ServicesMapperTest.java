@@ -58,6 +58,7 @@ class ServicesMapperTest {
         List<Services> servicesList = mapper.mapToServicesList(servicesDtoList);
 
         //Then
+        assertEquals(3, servicesList.size());
         assertEquals(1L, servicesList.get(0).getId());
         assertEquals(2L, servicesList.get(1).getId());
         assertEquals(3L, servicesList.get(2).getId());

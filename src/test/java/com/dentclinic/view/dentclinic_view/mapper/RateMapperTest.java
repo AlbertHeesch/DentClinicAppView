@@ -57,6 +57,7 @@ class RateMapperTest {
         List<Rate> rateList = mapper.mapToRateList(rateDtoList);
 
         //Then
+        assertEquals(3, rateList.size());
         assertEquals(1L, rateList.get(0).getId());
         assertEquals(2L, rateList.get(1).getId());
         assertEquals(3L, rateList.get(2).getId());
