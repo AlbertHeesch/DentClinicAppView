@@ -25,7 +25,8 @@ In order to run my application properly please use these projects:
 - Discovery - https://github.com/AlbertHeesch/discovery,
 - Gateway - https://github.com/AlbertHeesch/gateway,
 - Main Back End - https://github.com/AlbertHeesch/DentClinicApp,
-- Rates Back End - https://github.com/AlbertHeesch/DentClinicAppRates.
+- Rates Back End - https://github.com/AlbertHeesch/DentClinicAppRates,
+- Integration Test Suite - https://github.com/AlbertHeesch/DentClinicAppTesting.
 
 ## How to run
 Build your gradle with `gradlew build` in terminal.
