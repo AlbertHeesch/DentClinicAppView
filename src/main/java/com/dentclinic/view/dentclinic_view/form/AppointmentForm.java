@@ -32,8 +32,8 @@ public class AppointmentForm extends FormLayout
     private final TextField surname = new TextField("Surname");
     private final BigDecimalField pesel = new BigDecimalField("PESEL");
     private final EmailField email = new EmailField("Email address");
-    private final DateTimePicker date = new DateTimePicker("Appointment date");
     private final ComboBox<Dentist> dentist = new ComboBox<>("Dentist");
+    private final DateTimePicker date = new DateTimePicker("Appointment date");
     private final ComboBox<Services> service = new ComboBox<>("Service");
     Binder<Appointment> binder = new BeanValidationBinder<>(Appointment.class);
     private Appointment appointment;
@@ -48,6 +48,7 @@ public class AppointmentForm extends FormLayout
 
         dentist.setItems(dentists);
         dentist.setItemLabelGenerator(Dentist::getSurname);
+
         service.setItems(services);
         service.setItemLabelGenerator(Services::getDescription);
 
@@ -58,7 +59,7 @@ public class AppointmentForm extends FormLayout
         email.setClearButtonVisible(true);
         email.setInvalid(true);
 
-        add(name, surname, pesel, email, date, dentist, service, createButtonsLayout());
+        add(name, surname, pesel, email, dentist, date, service, createButtonsLayout());
     }
 
     private void configureDatePicker()
@@ -160,6 +161,10 @@ public class AppointmentForm extends FormLayout
 
     public ComboBox<Services> getService() {
         return service;
+    }
+
+    public ComboBox<Dentist> getDentist() {
+        return dentist;
     }
 
     public Binder<Appointment> getBinder() {

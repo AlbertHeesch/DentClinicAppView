@@ -65,8 +65,16 @@ public class PatientView extends VerticalLayout
         form.setAppointment(appointment);
         form.setVisible(true);
         form.getSave().setText("Book");
+
         form.getDelete().setVisible(false);
         form.getClose().setVisible(false);
+
+        form.getDate().setEnabled(false);
+
+        form.getDentist().addValueChangeListener(e -> form.getDate().setEnabled(true));
+        form.getDentist().setAllowCustomValue(false);
+
+        form.getService().setAllowCustomValue(false);
 
         List<LocalDateTime> appointmentsDateTime = api.fetchAllAppointments().stream()
                 .map(Appointment::getDate)
@@ -89,7 +97,7 @@ public class PatientView extends VerticalLayout
                             startDateTime.getMinute());
                     return !(LocalTime.of(8, 0).isAfter(startTime)
                             || LocalTime.of(15, 0).isBefore(startTime));
-                }, "The selected time is not available")
+                }, "Our clinic is open from 8 am to 4 pm")
                 .bind(Appointment::getDate,
                         Appointment::setDate);
     }
