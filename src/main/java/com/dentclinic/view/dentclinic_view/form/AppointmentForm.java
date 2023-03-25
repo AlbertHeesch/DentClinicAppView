@@ -46,6 +46,7 @@ public class AppointmentForm extends FormLayout
     public AppointmentForm(List<Dentist> dentists, List<Services> services){
         addClassName("appointment-form");
 
+        dentists.add(0, new Dentist(0L, "Dentist", "Any", LocalDate.of(2000, 1,1)));
         dentist.setItems(dentists);
         dentist.setItemLabelGenerator(Dentist::getSurname);
 
