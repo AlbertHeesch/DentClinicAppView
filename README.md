@@ -29,6 +29,8 @@ In order to run my application properly please use these projects:
 - Integration Test Suite - https://github.com/AlbertHeesch/DentClinicAppTesting.
 
 ## How to run
+Make sure that your localhost: 8080, 8081, 8082, 8083, 8084 and 8085 ports are available.
+
 Build your gradle with `gradlew build` in terminal.
 
 Run the projects in order:
@@ -37,5 +39,7 @@ Run the projects in order:
 - Gateway,
 - DentAppClinic & DentAppClinicRates,
 - DentAppClinicView.
+
+Now you can check http://localhost:8082 to see if all projects are registered in discovery.
 
 Enter the http://localhost:8085/home page in your browser.
