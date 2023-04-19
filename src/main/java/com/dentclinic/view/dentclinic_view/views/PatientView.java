@@ -176,7 +176,7 @@ public class PatientView extends VerticalLayout
     private List<BigDecimal> getTaxList()
     {
         return new ArrayList<>(getRateList().stream()
-                .filter(name -> name.getName().equals("PL_TAX"))
+                .filter(name -> name.getName().equals("TAX"))
                 .map(Rate::getValue)
                 .collect(Collectors.toList()));
     }
@@ -185,7 +185,7 @@ public class PatientView extends VerticalLayout
     {
         String currenciesRates = "";
 
-        if(!(getRateList().size() == 0))
+        if((!getUsdList().isEmpty()) && (!getEurList().isEmpty()) && (!getGbpList().isEmpty()))
         {
             currenciesRates = "Rates according to PLN:<br>" +
                     "USD: " + getUsdList().get(0) + "<br>EUR: " + getEurList().get(0) + "<br>GBP: " + getGbpList().get(0);
@@ -197,7 +197,7 @@ public class PatientView extends VerticalLayout
     {
         String taxRateInfoTxt = "";
 
-        if(!(getRateList().size() == 0 || getServicesList().size() == 0))
+        if(!(getRateList().isEmpty() || getServicesList().isEmpty()))
         {
             taxRateInfoTxt = "<br>+ Poland tax rate: " + getTaxList().get(0) + " %";
         }
@@ -206,14 +206,14 @@ public class PatientView extends VerticalLayout
 
     private String setBasePricesTxt()
     {
-        String basePrices = "";
+        StringBuilder basePrices = new StringBuilder();
 
         if(!(getServicesList().size() == 0)) {
-            basePrices = "Base services prices: <br>";
+            basePrices = new StringBuilder("Base services prices: <br>");
             for (Services service : getServicesList()) {
-                basePrices += service.getDescription() + ": " + service.getCost() + "<br>";
+                basePrices.append(service.getDescription()).append(": ").append(service.getCost()).append("<br>");
             }
         }
-        return basePrices;
+        return basePrices.toString();
     }
 }
