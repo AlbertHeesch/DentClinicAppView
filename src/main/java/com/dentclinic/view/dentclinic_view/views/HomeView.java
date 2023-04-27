@@ -31,31 +31,18 @@ public class HomeView extends VerticalLayout {
     {
         add(new H1("DentClinicApp"));
         add(new H2("Welcome to our clinic!"));
-        add(new Paragraph("Tell us who you are :)"));
-        add(new Paragraph("I am a/an :"));
     }
 
     private void createButtons()
     {
-        Button patientButton = new Button("Patient");
+        Button patientButton = new Button("Book an appointment");
         patientButton.addClickListener(e ->
                 patientButton.getUI().ifPresent(ui ->
                                 ui.navigate("/patient")));
-        Button employeeButton = new Button("Employee");
-        employeeButton.addClickListener(e ->
-                employeeButton.getUI().ifPresent(ui ->
-                        ui.navigate("/dentist/all"))
-        );
-        Button adminButton = new Button("Admin");
-        adminButton.addClickListener(e ->
-                adminButton.getUI().ifPresent(ui ->
-                        ui.navigate("/admin/appointment"))
-        );
-        patientButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
-        employeeButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
-        adminButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
 
-        HorizontalLayout buttonsLayout = new HorizontalLayout(patientButton, employeeButton, adminButton);
+        patientButton.addThemeVariants(ButtonVariant.LUMO_LARGE);
+
+        HorizontalLayout buttonsLayout = new HorizontalLayout(patientButton);
         addAndExpand(buttonsLayout);
     }
 }
