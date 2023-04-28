@@ -30,8 +30,8 @@ public class DentistLayout extends AppLayout {
     }
 
     private void createHeader() {
-        H1 logo = new H1("DentClinicApp");
-        logo.addClassNames("text-l", "m-m");
+        H1 appName = new H1("DentClinicApp");
+        appName.addClassNames("text-l", "m-m");
 
         Button logout = new Button("Log out", e -> securityService.logout());
         Button homeButton = new Button("Home");
@@ -41,15 +41,16 @@ public class DentistLayout extends AppLayout {
         );
         HorizontalLayout header = new HorizontalLayout(
                 new DrawerToggle(),
-                logo,
+                appName,
                 homeButton,
                 logout
         );
 
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
-        header.expand(logo);
+        header.expand(appName);
         header.setWidth("100%");
         header.addClassNames("py-0", "px-m");
+        header.setHeight("100px");
 
         addToNavbar(header);
 
