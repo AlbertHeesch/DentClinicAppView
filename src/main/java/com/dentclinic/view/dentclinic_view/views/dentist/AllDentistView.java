@@ -2,7 +2,6 @@ package com.dentclinic.view.dentclinic_view.views.dentist;
 
 import com.dentclinic.view.dentclinic_view.domain.Appointment;
 import com.dentclinic.view.dentclinic_view.layout.DentistLayout;
-import com.dentclinic.view.dentclinic_view.layout.PatientLayout;
 import com.dentclinic.view.dentclinic_view.service.AppointmentService;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

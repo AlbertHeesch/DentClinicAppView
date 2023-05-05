@@ -8,9 +8,9 @@ import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
 
-public class PatientLayout extends AppLayout {
+public class HomeLayout extends AppLayout {
 
-    public PatientLayout() {
+    public HomeLayout() {
         H1 title = new H1("DentClinicApp");
         title.getStyle()
                 .set("font-size", "var(--lumo-font-size-l)")
@@ -26,7 +26,10 @@ public class PatientLayout extends AppLayout {
 
         HorizontalLayout layout = new HorizontalLayout(title, tabs);
         layout.setWidth("100%");
-        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        layout.setAlignSelf(FlexComponent.Alignment.CENTER, title);
+        layout.setAlignSelf(FlexComponent.Alignment.CENTER, tabs);
+        layout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
 
         addToNavbar(layout);
     }

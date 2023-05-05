@@ -1,12 +1,7 @@
 package com.dentclinic.view.dentclinic_view.views;
 
-import com.dentclinic.view.dentclinic_view.layout.PatientLayout;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H2;
+import com.dentclinic.view.dentclinic_view.layout.HomeLayout;
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
@@ -14,7 +9,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
 @PageTitle("Home | DentClinicApp")
-@Route(value="home", layout = PatientLayout.class)
+@Route(value="home", layout = HomeLayout.class)
 @AnonymousAllowed
 public class HomeView extends VerticalLayout {
 
