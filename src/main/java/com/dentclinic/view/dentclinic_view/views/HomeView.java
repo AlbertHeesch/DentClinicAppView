@@ -59,7 +59,7 @@ public class HomeView extends VerticalLayout {
         //TODO oops something went wrong with if statement
         if(tab.equals(homeLayout.getBookTab())) {
             add(h2Layout);
-            for(int i=0; i<100; i++) {
+            for(int i=0; i<10; i++) {
                 Label sampleLabel = new Label("Name Surname" + i);
                 sampleLabel.getStyle().set("color", "white");
 
@@ -68,11 +68,13 @@ public class HomeView extends VerticalLayout {
                         .set("background-color", "#00c3a5")
                         .set("border-radius", "25px");
                 dataLayout.setMinWidth("400px");
+                dataLayout.setHeight("100%");
 
                 HorizontalLayout horizontalLayout = new HorizontalLayout(dataLayout);
-                horizontalLayout.setMinWidth("570px");
-                horizontalLayout.setMinHeight("280px");
+                horizontalLayout.setMinWidth("1100px");
+                horizontalLayout.setHeight("350px");
                 horizontalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+                horizontalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
                 horizontalLayout.getStyle()
                         .set("background", "#E7E9EB")
                         .set("border-radius", "25px");
@@ -80,14 +82,14 @@ public class HomeView extends VerticalLayout {
                 VerticalLayout buttonsGroupLayout = new VerticalLayout();
                 buttonsGroupLayout.setAlignItems(FlexComponent.Alignment.CENTER);
                 buttonsGroupLayout.setWidth("60%");
-                buttonsGroupLayout.setHeight("100%");
+                buttonsGroupLayout.setHeight("90%");
                 buttonsGroupLayout.setSpacing(false);
 
                 HorizontalLayout buttonsLayout = new HorizontalLayout();
                 buttonsLayout.setWidth("100%");
                 buttonsLayout.setHeight("85%");
                 buttonsLayout.setJustifyContentMode(JustifyContentMode.CENTER);
-                buttonsLayout.getStyle().set("padding", "5px 3px 5 px 3px");
+                buttonsLayout.getStyle().set("padding", "5px 3px 5px 3px");
 
                 Button leftButton = new Button("<");
                 leftButton.setMinHeight("220px");
@@ -115,11 +117,15 @@ public class HomeView extends VerticalLayout {
                 timeButton.setWidth("95%");
                 buttonsGroupLayout.add(buttonsLayout, timeButton);
                 horizontalLayout.add(buttonsGroupLayout);
-
-                add(horizontalLayout);
+                HorizontalLayout backgroundLayout = new HorizontalLayout(horizontalLayout);
+                backgroundLayout.setWidth("100%");
+                add(backgroundLayout);
             }
         } else {
-            add(surnameField, peselField, findButton);
+            HorizontalLayout backgroundLayout = new HorizontalLayout(surnameField, peselField, findButton);
+            backgroundLayout.setWidth("100%");
+            backgroundLayout.setAlignItems(Alignment.BASELINE);
+            add(backgroundLayout);
         }
     }
 }
