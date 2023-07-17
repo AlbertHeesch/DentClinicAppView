@@ -72,7 +72,7 @@ public class HomeView extends VerticalLayout {
 
                 HorizontalLayout horizontalLayout = new HorizontalLayout(dataLayout);
                 horizontalLayout.setMinWidth("1100px");
-                horizontalLayout.setHeight("350px");
+                horizontalLayout.setHeight("320px");
                 horizontalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
                 horizontalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
                 horizontalLayout.getStyle()
@@ -84,6 +84,7 @@ public class HomeView extends VerticalLayout {
                 buttonsGroupLayout.setWidth("60%");
                 buttonsGroupLayout.setHeight("90%");
                 buttonsGroupLayout.setSpacing(false);
+                buttonsGroupLayout.setPadding(false);
 
                 HorizontalLayout buttonsLayout = new HorizontalLayout();
                 buttonsLayout.setWidth("100%");
@@ -115,6 +116,53 @@ public class HomeView extends VerticalLayout {
                 buttonsLayout.add(rightButton);
                 Button timeButton = new Button("More");
                 timeButton.setWidth("95%");
+                timeButton.addClickListener(e -> {
+                   if(timeButton.getText().equals("More")){
+                       timeButton.setText("Less");
+                       horizontalLayout.setHeight("450px");
+                       leftButton.setMinHeight("325px");
+                       rightButton.setMinHeight("325px");
+                       buttonsLayout.removeAll();
+                       buttonsLayout.add(leftButton);
+
+                       for(int j=0; j<list.size(); j++) {
+                           VerticalLayout dateButtonsLayout = new VerticalLayout(new Label(LocalDate.now().plusDays(j).getDayOfMonth() + "\n" + String.valueOf(LocalDate.now().getMonth()).substring(0,3)));
+                           for(int x=0; x<7; x++) {
+                               Button bookButton = new Button("Book");
+                               dateButtonsLayout.add(bookButton);
+                           }
+                           dateButtonsLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+                           dateButtonsLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+                           dateButtonsLayout.setSpacing(false);
+                           dateButtonsLayout.setWidth("12%");
+                           dateButtonsLayout.setHeight("100%");
+                           buttonsLayout.add(dateButtonsLayout);
+                           buttonsLayout.add(rightButton);
+                       }
+                   } else {
+                       timeButton.setText("More");
+                       horizontalLayout.setHeight("340px");
+                       leftButton.setMinHeight("220px");
+                       rightButton.setMinHeight("220px");
+                       buttonsLayout.removeAll();
+                       buttonsLayout.add(leftButton);
+
+                       for(int j=0; j<list.size(); j++) {
+                           VerticalLayout dateButtonsLayout = new VerticalLayout(new Label(LocalDate.now().plusDays(j).getDayOfMonth() + "\n" + String.valueOf(LocalDate.now().getMonth()).substring(0,3)));
+                           for(int x=0; x<4; x++) {
+                               Button bookButton = new Button("Book");
+                               dateButtonsLayout.add(bookButton);
+                           }
+                           dateButtonsLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+                           dateButtonsLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+                           dateButtonsLayout.setSpacing(false);
+                           dateButtonsLayout.setWidth("12%");
+                           dateButtonsLayout.setHeight("100%");
+                           buttonsLayout.add(dateButtonsLayout);
+                           buttonsLayout.add(rightButton);
+                       }
+                   }
+                });
                 buttonsGroupLayout.add(buttonsLayout, timeButton);
                 horizontalLayout.add(buttonsGroupLayout);
                 HorizontalLayout backgroundLayout = new HorizontalLayout(horizontalLayout);
