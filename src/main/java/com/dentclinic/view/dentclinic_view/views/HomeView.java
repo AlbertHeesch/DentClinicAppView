@@ -4,10 +4,13 @@ import com.dentclinic.view.dentclinic_view.layout.HomeLayout;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
+import com.vaadin.flow.component.textfield.BigDecimalField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -30,9 +33,12 @@ public class HomeView extends VerticalLayout {
     private H2 specialistsLabel = new H2("Our specialists");
     private HorizontalLayout h2Layout = new HorizontalLayout(specialistsLabel);
     private TextField surnameField = new TextField("Surname");
-    private TextField peselField = new TextField("PESEL");
+    private BigDecimalField peselField = new BigDecimalField("PESEL");
     private Button findButton = new Button("Find");
+    private Button backButton = new Button("Back");
+    private Button saveButton = new Button("Save");
     private List<String> list = List.of("Day1", "Day2", "Day3", "Day4", "Day5");
+    private HorizontalLayout backgroundUpdateLayout = new HorizontalLayout(surnameField, peselField, findButton);
 
     public HomeView( @Autowired HomeLayout homeLayout)
     {
@@ -52,10 +58,13 @@ public class HomeView extends VerticalLayout {
 
         setContent(homeLayout.getTabs().getSelectedTab());
         homeLayout.getTabs().addSelectedChangeListener(event -> setContent(event.getSelectedTab()));
+
+        addListeners();
     }
 
     private void setContent(Tab tab) {
         removeAll();
+
         //TODO oops something went wrong with if statement
         if(tab.equals(homeLayout.getBookTab())) {
             add(h2Layout);
@@ -170,10 +179,34 @@ public class HomeView extends VerticalLayout {
                 add(backgroundLayout);
             }
         } else {
-            HorizontalLayout backgroundLayout = new HorizontalLayout(surnameField, peselField, findButton);
-            backgroundLayout.setWidth("100%");
-            backgroundLayout.setAlignItems(Alignment.BASELINE);
-            add(backgroundLayout);
+            backgroundUpdateLayout.setWidth("100%");
+            backgroundUpdateLayout.setAlignItems(Alignment.BASELINE);
+            backgroundUpdateLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+            setJustifyContentMode(JustifyContentMode.CENTER);
+            setWidth("100%");
+            add(backgroundUpdateLayout);
         }
+    }
+
+    private void addListeners() {
+        findButton.addClickListener(e -> {
+            backgroundUpdateLayout.removeAll();
+            backgroundUpdateLayout.add(saveButton, backButton);
+        });
+        saveButton.addClickListener(e -> {
+            backgroundUpdateLayout.removeAll();
+            backgroundUpdateLayout.add(surnameField, peselField, findButton);
+            Notification notification = Notification
+                    .show("Changes have been saved.");
+            notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            surnameField.clear();
+            peselField.clear();
+        });
+        backButton.addClickListener(e -> {
+            backgroundUpdateLayout.removeAll();
+            backgroundUpdateLayout.add(surnameField, peselField, findButton);
+            surnameField.clear();
+            peselField.clear();
+        });
     }
 }
